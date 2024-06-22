@@ -2,8 +2,7 @@ const handleFormInput = () => {
     const form = document.querySelector("form#parameter-form");
     const objects = buildObjects(form);
 
-    fillCanvas(form, objects);
-
+    buildCanvas(form, objects);
 }
 
 const validateInput = (form) => {
@@ -44,7 +43,7 @@ const buildObjects = (form) => {
         })
 };
 
-const fillCanvas = (form, objects) => {
+const buildCanvas = (form, objects) => {
     const canvas = document.getElementById('graphCanvas');
     clearCanvas(canvas);
 
@@ -52,7 +51,6 @@ const fillCanvas = (form, objects) => {
         return;
     }
 
-    
     const context = canvas.getContext('2d');
 
     const minX = form.querySelector('input[name=x-min]').value || 0;
@@ -64,14 +62,11 @@ const fillCanvas = (form, objects) => {
     const canvasHeight = canvas.height;
 
     // Set the graph parameters
-    //const scaleX = 0.8 * (canvasWidth / (2 * (maxX - minX)));
     const xRange = maxX - minX || 10;
     const yRange = maxY - minY || 10;
     const scaleX = canvasWidth / xRange;
     const scaleY = canvasHeight / yRange;
 
-    //const scaleX = 2 * xRange / canvasWidth;
-    //const scaleY = 2 * yRange / canvasHeight;
     const offsetX = canvasWidth / 2;
     const offsetY = canvasHeight / 2;
 
