@@ -67,10 +67,10 @@ const buildCanvas = (form, objects) => {
 
     const context = canvas.getContext('2d');
 
-    const minX = form.querySelector('input[name=x-min]').value || 0;
-    const maxX = form.querySelector('input[name=x-max]').value || 0;
-    const minY = form.querySelector('input[name=y-min]').value || 0;
-    const maxY = form.querySelector('input[name=y-max]').value || 0;
+    const minX = parseFloat(form.querySelector('input[name=x-min]').value) || 0;
+    const maxX = parseFloat(form.querySelector('input[name=x-max]').value) || 0;
+    const minY = parseFloat(form.querySelector('input[name=y-min]').value) || 0;
+    const maxY = parseFloat(form.querySelector('input[name=y-max]').value) || 0;
 
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
