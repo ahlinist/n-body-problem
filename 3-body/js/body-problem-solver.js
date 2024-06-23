@@ -1,9 +1,11 @@
-const G = 6.6743 * 10e-11;
+const G = 6.6743e-11;
 
 let scaleX;
 let scaleY;
 let offsetX;
 let offsetY;
+
+let timer = 0;
 
 const canvas = document.getElementById('graphCanvas');
 
@@ -121,6 +123,8 @@ const startMotion = () => {
 };
 
 const calculateStep = (objects, interval) => {
+    timer += 1 / 1000;
+
     if (objects[0]['velocity-x-result']) {
         objects.forEach(object => {
             object['velocity-x'] = object['velocity-x-result'];
