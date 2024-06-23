@@ -168,7 +168,7 @@ const calculateVelocity = (object, accumulator, other, x, y, initialVelocity, in
 
     const [oMass, oX, oY, factor] = calculateIntermediateValues(other, x, y, axis);
 
-    return accumulator + initialVelocity + factor * interval * (G * oMass)/Math.sqrt((x - oX) ** 2 + (y - oY) ** 2);
+    return accumulator + initialVelocity + factor * interval * (G * oMass)/((x - oX) ** 2 + (y - oY) ** 2);
 };
 
 const calculatePosition = (object, accumulator, other, x, y, initialPosition, initialVelocity, interval, axis) => {
@@ -178,7 +178,7 @@ const calculatePosition = (object, accumulator, other, x, y, initialPosition, in
 
     const [oMass, oX, oY, factor] = calculateIntermediateValues(other, x, y, axis);
 
-    return accumulator + initialPosition + initialVelocity * interval + factor * interval ** 2 * ((G * oMass)/(Math.sqrt((x - oX) ** 2 + (y - oY) ** 2))) / 2;
+    return accumulator + initialPosition + initialVelocity * interval + factor * interval ** 2 * ((G * oMass)/((x - oX) ** 2 + (y - oY) ** 2)) / 2;
 };
 
 const calculateIntermediateValues = (other, x, y, axis) => {
@@ -186,11 +186,7 @@ const calculateIntermediateValues = (other, x, y, axis) => {
     const oX = Number(other['position-x']);
     const oY = Number(other['position-y']);
 
-    let angle = Math.atan((y - oY) / (x - oX));
-
-    if (angle < 0) {
-        angle += Math.PI;
-    }
+    const angle = Math.atan2(y - oY, x - oX);
 
     let factor;
 
