@@ -9,9 +9,15 @@ const canvas = document.getElementById('graphCanvas');
 
 const handleFormInput = () => {
     const form = document.querySelector("form#parameter-form");
-    const objects = buildObjects(form);
 
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+    });
+
+    const objects = buildObjects(form);
     buildCanvas(form, objects);
+
+    return objects;
 }
 
 const validateInput = (form) => {
@@ -42,11 +48,11 @@ const buildObjects = (form) => {
             const id = column.id;
             const index = id.slice(id.indexOf('-') + 1);
             object.index = index;
-            object.mass = column.querySelector(`input[name=mass-${index}]`).value;
-            object['position-x'] = column.querySelector(`input[name=position-x-${index}]`).value || 0;
-            object['position-y'] = column.querySelector(`input[name=position-y-${index}]`).value || 0;
-            object['velocity-x'] = column.querySelector(`input[name=velocity-x-${index}]`).value || 0;
-            object['velocity-y'] = column.querySelector(`input[name=velocity-y-${index}]`).value || 0;
+            object.mass = parseFloat(column.querySelector(`input[name=mass-${index}]`).value);
+            object['position-x'] = parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0;
+            object['position-y'] = parseFloat(column.querySelector(`input[name=position-y-${index}]`).value) || 0;
+            object['velocity-x'] = parseFloat(column.querySelector(`input[name=velocity-x-${index}]`).value) || 0;
+            object['velocity-y'] = parseFloat(column.querySelector(`input[name=velocity-y-${index}]`).value) || 0;
             object.color = column.querySelector(`select`).value || 'blue';
             return object;
         })
@@ -109,17 +115,12 @@ const clearCanvas = (canvas) => {
 }
 
 const startMotion = () => {
-    const form = document.querySelector("form#parameter-form");
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-    });
-
-    const objects = buildObjects(form);
+    const objects = handleFormInput();
 
     const interval = 1;
 
     setInterval(() => calculateStep(objects, interval), interval * 10);
+    //calculateStep(objects, interval);
 };
 
 const calculateStep = (objects, interval) => {
@@ -147,14 +148,14 @@ const calculateStep = (objects, interval) => {
         }, 0);
 
         object['position-x-result'] = objects.reduce((accumulator, other) => {
-            return calculatePosition(object, accumulator, other, x, y, vx, interval, 'x');
+            return calculatePosition(object, accumulator, other, x, y, x, vx, interval, 'x');
         }, 0);
 
         object['position-y-result'] = objects.reduce((accumulator, other) => {
-            return calculatePosition(object, accumulator, other, x, y, vy, interval, 'y');
+            return calculatePosition(object, accumulator, other, x, y, y, vy, interval, 'y');
         }, 0);
 
-        console.log(object['position-x'])
+        console.log(object['position-y'])
     });
 
     drawObjects(objects);
@@ -165,34 +166,22 @@ const calculateVelocity = (object, accumulator, other, x, y, initialVelocity, in
         return accumulator;
     }
 
-    const oMass = Number(other.mass);
-    const oX = Number(other['position-x']);
-    const oY = Number(other['position-y']);
-
-    let angle = Math.atan((y - oY) / (x - oX));
-
-    if (angle < 0) {
-        angle += Math.PI;
-    }
-
-    let factor;
-
-    if (axis === 'x') {
-        factor = Math.cos(angle);
-    } else if (axis === 'y') {
-        factor = Math.sin(angle);
-    } else {
-        throw new Error("Unknown axis!");
-    }
+    const [oMass, oX, oY, factor] = calculateIntermediateValues(other, x, y, axis);
 
     return accumulator + initialVelocity + factor * interval * (G * oMass)/Math.sqrt((x - oX) ** 2 + (y - oY) ** 2);
 };
 
-const calculatePosition = (object, accumulator, other, x, y, initialVelocity, interval, axis) => {
+const calculatePosition = (object, accumulator, other, x, y, initialPosition, initialVelocity, interval, axis) => {
     if (object.index === other.index) {
         return accumulator;
     }
 
+    const [oMass, oX, oY, factor] = calculateIntermediateValues(other, x, y, axis);
+
+    return accumulator + initialPosition + initialVelocity * interval + factor * interval ** 2 * ((G * oMass)/(Math.sqrt((x - oX) ** 2 + (y - oY) ** 2))) / 2;
+};
+
+const calculateIntermediateValues = (other, x, y, axis) => {
     const oMass = Number(other.mass);
     const oX = Number(other['position-x']);
     const oY = Number(other['position-y']);
@@ -213,5 +202,5 @@ const calculatePosition = (object, accumulator, other, x, y, initialVelocity, in
         throw new Error("Unknown axis!");
     }
 
-    return accumulator + x + initialVelocity * interval + factor * interval ** 2 * ((G * oMass)/(Math.sqrt((x - oX) ** 2 + (y - oY) ** 2))) / 2;
+    return [oMass, oX, oY, factor];
 };
