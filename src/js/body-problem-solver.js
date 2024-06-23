@@ -116,11 +116,8 @@ const clearCanvas = (canvas) => {
 
 const startMotion = () => {
     const objects = handleFormInput();
-
     const interval = 1;
-
-    setInterval(() => calculateStep(objects, interval), interval * 10);
-    //calculateStep(objects, interval);
+    setInterval(() => calculateStep(objects, interval), interval * 1000);
 };
 
 const calculateStep = (objects, interval) => {
@@ -154,8 +151,6 @@ const calculateStep = (objects, interval) => {
         object['position-y-result'] = objects.reduce((accumulator, other) => {
             return calculatePosition(object, accumulator, other, x, y, y, vy, interval, 'y');
         }, 0);
-
-        console.log(object['position-y'])
     });
 
     drawObjects(objects);
@@ -198,5 +193,5 @@ const calculateIntermediateValues = (other, x, y, axis) => {
         throw new Error("Unknown axis!");
     }
 
-    return [oMass, oX, oY, factor];
+    return [oMass, oX, oY, -factor]; //why - factor? why???
 };
