@@ -117,7 +117,7 @@ const clearCanvas = (canvas) => {
 const startMotion = () => {
     const objects = handleFormInput();
     const interval = 1;
-    setInterval(() => calculateStep(objects, interval), interval * 1000);
+    setInterval(() => calculateStep(objects, interval / 1000), interval);
 };
 
 const calculateStep = (objects, interval) => {
