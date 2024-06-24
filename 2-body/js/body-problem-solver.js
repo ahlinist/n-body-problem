@@ -124,23 +124,15 @@ const calculateStep = (objects, interval) => {
         });
     }
 
-    const vx1 = Number(object1.vx);
-    const vy1 = Number(object1.vy);
-    const x1 = Number(object1.x);
-    const y1 = Number(object1.y);
-    object1['velocity-x-result'] = calculateVelocity(object1, object2, vx1, interval, 'x');
-    object1['velocity-y-result'] = calculateVelocity(object1, object2, vy1, interval, 'y');
-    object1['position-x-result'] = calculatePosition(object1, object2, x1, vx1, interval, 'x');
-    object1['position-y-result'] = calculatePosition(object1, object2, y1, vy1, interval, 'y');
+    object1['velocity-x-result'] = calculateVelocity(object1, object2, object1.vx, interval, 'x');
+    object1['velocity-y-result'] = calculateVelocity(object1, object2, object1.vy, interval, 'y');
+    object1['position-x-result'] = calculatePosition(object1, object2, object1.x, object1.vx, interval, 'x');
+    object1['position-y-result'] = calculatePosition(object1, object2, object1.y, object1.vy, interval, 'y');
 
-    const vx2 = Number(object2.vx);
-    const vy2 = Number(object2.vy);
-    const x2 = Number(object2.x);
-    const y2 = Number(object2.y);
-    object2['velocity-x-result'] = calculateVelocity(object2, object1, vx2, interval, 'x');
-    object2['velocity-y-result'] = calculateVelocity(object2, object1, vy2, interval, 'y');
-    object2['position-x-result'] = calculatePosition(object2, object1, x2, vx2, interval, 'x');
-    object2['position-y-result'] = calculatePosition(object2, object1, y2, vy2, interval, 'y');
+    object2['velocity-x-result'] = calculateVelocity(object2, object1, object2.vx, interval, 'x');
+    object2['velocity-y-result'] = calculateVelocity(object2, object1, object2.vy, interval, 'y');
+    object2['position-x-result'] = calculatePosition(object2, object1, object2.x, object2.vx, interval, 'x');
+    object2['position-y-result'] = calculatePosition(object2, object1, object2.y, object2.vy, interval, 'y');
 
     drawObjects(objects);
 };
