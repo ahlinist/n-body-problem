@@ -18,23 +18,16 @@ const handleFormInput = () => {
 
 const validateInput = (form) => {
     const errorBox = document.querySelector("p#error-message");
-    errorBox.innerHTML = "";
-
     let errorMessage = "";
-
-    const massInputs = form.querySelectorAll('input[name^="mass-"]');
-    const emptyMassInputs = Array.from(massInputs).filter(input => input.value.trim() === '');
+    const emptyMassInputs = Array.from(form.querySelectorAll('input[name^="mass-"]'))
+        .filter(input => input.value.trim() === '');
 
     if (emptyMassInputs.length) {
         errorMessage += "Provide mass values<br>"
     }
 
-    if (errorMessage) {
-        errorBox.innerHTML = errorMessage;
-        return false;
-    } else {
-        return true;
-    }
+    errorBox.innerHTML = errorMessage;
+    return errorMessage ? false : true;
 }
 
 const buildObjects = (form) => {
