@@ -124,16 +124,14 @@ const calculateStep = (objects, interval) => {
         });
     }
 
-    const [vx1, vy1] = calculateVelocity(object1, object2, interval);
-    const [x1, y1] = calculatePosition(object1, object2, interval);
+    const [vx1, vy1, x1, y1] = move(object1, object2, interval);
 
     object1['velocity-x-result'] = vx1;
     object1['velocity-y-result'] = vy1;
     object1['position-x-result'] = x1;
     object1['position-y-result'] = y1;
 
-    const [vx2, vy2] = calculateVelocity(object2, object1, interval);
-    const [x2, y2] = calculatePosition(object2, object1, interval);
+    const [vx2, vy2, x2, y2] = move(object2, object1, interval);
 
     object2['velocity-x-result'] = vx2;
     object2['velocity-y-result'] = vy2;
@@ -143,16 +141,11 @@ const calculateStep = (objects, interval) => {
     drawObjects(objects);
 };
 
-const calculateVelocity = (object, other, interval) => {
+const move = (object, other, interval) => {
     const angle = Math.atan2(object.y - other.y, object.x - other.x);
     const vx = object.vx - Math.cos(angle) * interval * (G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2);
     const vy = object.vy - Math.sin(angle) * interval * (G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2);
-    return [vx, vy];
-};
-
-const calculatePosition = (object, other, interval) => {
-    const angle = Math.atan2(object.y - other.y, object.x - other.x);
     const x = object.x + object.vx * interval - Math.cos(angle) * interval ** 2 * ((G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2)) / 2;
     const y = object.y + object.vy * interval - Math.sin(angle) * interval ** 2 * ((G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2)) / 2;
-    return [x, y];
+    return [vx, vy, x, y];
 };
