@@ -113,7 +113,6 @@ const calculateStep = (objects, interval) => {
 
     const object1 = objects[0];
     const object2 = objects[1];
-
     objects[0] = move(object1, object2, interval);
     objects[1] = move(object2, object1, interval);
 
