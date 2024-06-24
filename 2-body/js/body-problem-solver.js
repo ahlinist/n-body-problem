@@ -123,9 +123,12 @@ const move = (object, other, interval) => {
     const distanceSquared = (object.x - other.x) ** 2 + (object.y - other.y) ** 2;
     const acceleration = (G * other.mass) / distanceSquared;
     const angle = Math.atan2(object.y - other.y, object.x - other.x);
-    const vx = object.vx - Math.cos(angle) * interval * acceleration;
-    const vy = object.vy - Math.sin(angle) * interval * acceleration;
-    const x = object.x + object.vx * interval - Math.cos(angle) * acceleration * interval ** 2 / 2;
-    const y = object.y + object.vy * interval - Math.sin(angle) * acceleration * interval ** 2 / 2;
+    const xProjection = Math.cos(angle);
+    const yProjection = Math.sin(angle);
+
+    const vx = object.vx - xProjection * interval * acceleration;
+    const vy = object.vy - yProjection * interval * acceleration;
+    const x = object.x + object.vx * interval - xProjection * acceleration * interval ** 2 / 2;
+    const y = object.y + object.vy * interval - yProjection * acceleration * interval ** 2 / 2;
     return { vx, vy, x, y, mass: object.mass, color: object.color };
 };
