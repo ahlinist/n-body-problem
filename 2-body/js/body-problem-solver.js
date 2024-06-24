@@ -5,8 +5,6 @@ let scaleY;
 let offsetX;
 let offsetY;
 
-let timer = 0;
-
 const canvas = document.getElementById('graphCanvas');
 
 const handleFormInput = () => {
@@ -102,15 +100,13 @@ const clearCanvas = (canvas) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-const startMotion = () => {
+const startAnimation = () => {
     const objects = handleFormInput();
     const interval = 1;
-    setInterval(() => calculateStep(objects, interval / 100000), interval);
+    setInterval(() => calculateStep(objects, interval / 250), interval * 4);
 };
 
 const calculateStep = (objects, interval) => {
-    timer += 1 / 1000;
-
     const object1 = objects[0];
     const object2 = objects[1];
     objects[0] = move(object1, object2, interval);
@@ -132,3 +128,17 @@ const move = (object, other, interval) => {
     const y = object.y + object.vy * interval - yProjection * acceleration * interval ** 2 / 2;
     return { vx, vy, x, y, mass: object.mass, color: object.color };
 };
+
+const runSimulation = () => {
+    const time = parseFloat(document.querySelector("input#simulation-time").value);
+    const stepSize = 1/1000;
+    const objects = handleFormInput();
+    let totalElapsed = 0;
+
+    while (totalElapsed < time) {
+        calculateStep(objects, stepSize);
+        totalElapsed += stepSize;
+    }
+};
+
+handleFormInput();
