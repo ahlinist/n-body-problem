@@ -11,14 +11,8 @@ const canvas = document.getElementById('graphCanvas');
 
 const handleFormInput = () => {
     const form = document.querySelector("form#parameter-form");
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-    });
-
     const objects = buildObjects(form);
     buildCanvas(form, objects);
-
     return objects;
 }
 
