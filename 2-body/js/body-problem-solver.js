@@ -124,13 +124,17 @@ const calculateStep = (objects, interval) => {
         });
     }
 
-    object1['velocity-x-result'] = calculateVelocity(object1, object2, object1.vx, interval, 'x');
-    object1['velocity-y-result'] = calculateVelocity(object1, object2, object1.vy, interval, 'y');
+    const [vx1, vy1] = calculateVelocity(object1, object2, interval)
+
+    object1['velocity-x-result'] = vx1;
+    object1['velocity-y-result'] = vy1;
     object1['position-x-result'] = calculatePosition(object1, object2, object1.x, object1.vx, interval, 'x');
     object1['position-y-result'] = calculatePosition(object1, object2, object1.y, object1.vy, interval, 'y');
 
-    object2['velocity-x-result'] = calculateVelocity(object2, object1, object2.vx, interval, 'x');
-    object2['velocity-y-result'] = calculateVelocity(object2, object1, object2.vy, interval, 'y');
+    const [vx2, vy2] = calculateVelocity(object2, object1, interval);
+
+    object2['velocity-x-result'] = vx2;
+    object2['velocity-y-result'] = vy2;
     object2['position-x-result'] = calculatePosition(object2, object1, object2.x, object2.vx, interval, 'x');
     object2['position-y-result'] = calculatePosition(object2, object1, object2.y, object2.vy, interval, 'y');
 
@@ -139,20 +143,11 @@ const calculateStep = (objects, interval) => {
 
 
 
-const calculateVelocity = (object, other, initialVelocity, interval, axis) => {
+const calculateVelocity = (object, other, interval) => {
     const angle = Math.atan2(object.y - other.y, object.x - other.x);
-
-    let factor;
-
-    if (axis === 'x') {
-        factor = Math.cos(angle);
-    } else if (axis === 'y') {
-        factor = Math.sin(angle);
-    } else {
-        throw new Error("Unknown axis!");
-    }
-
-    return initialVelocity - factor * interval * (G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2);
+    const vx = object.vx - Math.cos(angle) * interval * (G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2);
+    const vy = object.vy - Math.sin(angle) * interval * (G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2);
+    return [vx, vy];
 };
 
 const calculatePosition = (object, other, initialPosition, initialVelocity, interval, axis) => {
