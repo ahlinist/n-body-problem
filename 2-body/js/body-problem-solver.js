@@ -114,30 +114,10 @@ const calculateStep = (objects, interval) => {
     const object1 = objects[0];
     const object2 = objects[1];
 
-    if (object1['velocity-x-result']) {
-        objects.forEach(object => {
-            object.vx = object['velocity-x-result'];
-            object.vy = object['velocity-y-result'];
-            object.x = object['position-x-result'];
-            object.y = object['position-y-result'];
-        });
-    }
+    objects[0] = move(object1, object2, interval);
+    objects[1] = move(object2, object1, interval);
 
-    const [vx1, vy1, x1, y1, mass1, color1] = move(object1, object2, interval);
-
-    object1['velocity-x-result'] = vx1;
-    object1['velocity-y-result'] = vy1;
-    object1['position-x-result'] = x1;
-    object1['position-y-result'] = y1;
-
-    const [vx2, vy2, x2, y2, mass2, color2] = move(object2, object1, interval);
-
-    object2['velocity-x-result'] = vx2;
-    object2['velocity-y-result'] = vy2;
-    object2['position-x-result'] = x2;
-    object2['position-y-result'] = y2;
-
-    drawObjects([{x: x1, y: y1, vx: vx1, vy: vy1, mass: mass1, color: color1}, {x: x2, y: y2, vx: vx2, vy: vy2, mass: mass2, color: color2}]);
+    drawObjects(objects);
 };
 
 const move = (object, other, interval) => {
@@ -146,5 +126,5 @@ const move = (object, other, interval) => {
     const vy = object.vy - Math.sin(angle) * interval * (G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2);
     const x = object.x + object.vx * interval - Math.cos(angle) * interval ** 2 * ((G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2)) / 2;
     const y = object.y + object.vy * interval - Math.sin(angle) * interval ** 2 * ((G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2)) / 2;
-    return [vx, vy, x, y, object.mass, object.color];
+    return { vx, vy, x, y, mass: object.mass, color: object.color };
 };
