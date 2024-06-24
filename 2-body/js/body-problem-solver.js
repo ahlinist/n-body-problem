@@ -34,15 +34,15 @@ const buildObjects = (form) => {
     return Array.from(form.querySelectorAll('div[id^="body-"]'))
         .map(column => {
             const object = {};
-            const id = column.id;
-            const index = id.slice(id.indexOf('-') + 1);
-            object.mass = parseFloat(column.querySelector(`input[name=mass-${index}]`).value);
-            object.x = parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0;
-            object.y = parseFloat(column.querySelector(`input[name=position-y-${index}]`).value) || 0;
-            object.vx = parseFloat(column.querySelector(`input[name=velocity-x-${index}]`).value) || 0;
-            object.vy = parseFloat(column.querySelector(`input[name=velocity-y-${index}]`).value) || 0;
-            object.color = column.querySelector(`select`).value || 'blue';
-            return object;
+            const index = column.id.slice(column.id.indexOf('-') + 1);
+            return {
+                mass: parseFloat(column.querySelector(`input[name=mass-${index}]`).value),
+                x: parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0,
+                y: parseFloat(column.querySelector(`input[name=position-y-${index}]`).value) || 0,
+                vx: parseFloat(column.querySelector(`input[name=velocity-x-${index}]`).value) || 0,
+                vy: parseFloat(column.querySelector(`input[name=velocity-y-${index}]`).value) || 0,
+                color: column.querySelector(`select`).value || 'blue',
+            };
         })
 };
 
