@@ -38,10 +38,10 @@ const buildObjects = (form) => {
             const index = id.slice(id.indexOf('-') + 1);
             object.index = index;
             object.mass = parseFloat(column.querySelector(`input[name=mass-${index}]`).value);
-            object['position-x'] = parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0;
-            object['position-y'] = parseFloat(column.querySelector(`input[name=position-y-${index}]`).value) || 0;
-            object['velocity-x'] = parseFloat(column.querySelector(`input[name=velocity-x-${index}]`).value) || 0;
-            object['velocity-y'] = parseFloat(column.querySelector(`input[name=velocity-y-${index}]`).value) || 0;
+            object.x = parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0;
+            object.y = parseFloat(column.querySelector(`input[name=position-y-${index}]`).value) || 0;
+            object.vx = parseFloat(column.querySelector(`input[name=velocity-x-${index}]`).value) || 0;
+            object.vy = parseFloat(column.querySelector(`input[name=velocity-y-${index}]`).value) || 0;
             object.color = column.querySelector(`select`).value || 'blue';
             return object;
         })
@@ -88,8 +88,8 @@ const drawObjects = (objects) => {
     const context = canvas.getContext('2d');
 
     objects.forEach(object => {
-        const x = Number(offsetX) + Number(object['position-x'] * scaleX);
-        const y = Number(offsetY) - Number(object['position-y'] * scaleY);
+        const x = Number(offsetX) + Number(object.x * scaleX);
+        const y = Number(offsetY) - Number(object.y * scaleY);
         context.beginPath();
         context.fillStyle = object.color;
         context.arc(x, y, 5, 0, Math.PI * 2);
@@ -112,67 +112,43 @@ const startMotion = () => {
 const calculateStep = (objects, interval) => {
     timer += 1 / 1000;
 
-    if (objects[0]['velocity-x-result']) {
+    const object1 = objects[0];
+    const object2 = objects[1];
+
+    if (object1['velocity-x-result']) {
         objects.forEach(object => {
-            object['velocity-x'] = object['velocity-x-result'];
-            object['velocity-y'] = object['velocity-y-result'];
-            object['position-x'] = object['position-x-result'];
-            object['position-y'] = object['position-y-result'];
+            object.vx = object['velocity-x-result'];
+            object.vy = object['velocity-y-result'];
+            object.x = object['position-x-result'];
+            object.y = object['position-y-result'];
         });
     }
 
-    objects.forEach(object => {
-        const vx = Number(object['velocity-x']);
-        const vy = Number(object['velocity-y']);
-        const x = Number(object['position-x']);
-        const y = Number(object['position-y']);
+    const vx1 = Number(object1.vx);
+    const vy1 = Number(object1.vy);
+    const x1 = Number(object1.x);
+    const y1 = Number(object1.y);
+    object1['velocity-x-result'] = calculateVelocity(object1, object2, x1, y1, vx1, interval, 'x');
+    object1['velocity-y-result'] = calculateVelocity(object1, object2, x1, y1, vy1, interval, 'y');
+    object1['position-x-result'] = calculatePosition(object1, object2, x1, y1, x1, vx1, interval, 'x');
+    object1['position-y-result'] = calculatePosition(object1, object2, x1, y1, y1, vy1, interval, 'y');
 
-        object['velocity-x-result'] = objects.reduce((accumulator, other) => {
-            return calculateVelocity(object, accumulator, other, x, y, vx, interval, 'x');
-        }, 0);
-
-        object['velocity-y-result'] = objects.reduce((accumulator, other) => {
-            return calculateVelocity(object, accumulator, other, x, y, vy, interval, 'y');
-        }, 0);
-
-        object['position-x-result'] = objects.reduce((accumulator, other) => {
-            return calculatePosition(object, accumulator, other, x, y, x, vx, interval, 'x');
-        }, 0);
-
-        object['position-y-result'] = objects.reduce((accumulator, other) => {
-            return calculatePosition(object, accumulator, other, x, y, y, vy, interval, 'y');
-        }, 0);
-    });
+    const vx2 = Number(object2.vx);
+    const vy2 = Number(object2.vy);
+    const x2 = Number(object2.x);
+    const y2 = Number(object2.y);
+    object2['velocity-x-result'] = calculateVelocity(object1, object1, x2, y2, vx2, interval, 'x');
+    object2['velocity-y-result'] = calculateVelocity(object1, object1, x2, y2, vy2, interval, 'y');
+    object2['position-x-result'] = calculatePosition(object1, object1, x2, y2, x2, vx2, interval, 'x');
+    object2['position-y-result'] = calculatePosition(object1, object1, x2, y2, y2, vy2, interval, 'y');
 
     drawObjects(objects);
 };
 
-const calculateVelocity = (object, accumulator, other, x, y, initialVelocity, interval, axis) => {
-    if (object.index === other.index) {
-        return accumulator;
-    }
 
-    const [oMass, oX, oY, factor] = calculateIntermediateValues(other, x, y, axis);
 
-    return accumulator + initialVelocity + factor * interval * (G * oMass)/((x - oX) ** 2 + (y - oY) ** 2);
-};
-
-const calculatePosition = (object, accumulator, other, x, y, initialPosition, initialVelocity, interval, axis) => {
-    if (object.index === other.index) {
-        return accumulator;
-    }
-
-    const [oMass, oX, oY, factor] = calculateIntermediateValues(other, x, y, axis);
-
-    return accumulator + initialPosition + initialVelocity * interval + factor * interval ** 2 * ((G * oMass)/((x - oX) ** 2 + (y - oY) ** 2)) / 2;
-};
-
-const calculateIntermediateValues = (other, x, y, axis) => {
-    const oMass = Number(other.mass);
-    const oX = Number(other['position-x']);
-    const oY = Number(other['position-y']);
-
-    const angle = Math.atan2(y - oY, x - oX);
+const calculateVelocity = (object, other, x, y, initialVelocity, interval, axis) => {
+    const angle = Math.atan2(y - other.y, x - other.x);
 
     let factor;
 
@@ -184,5 +160,21 @@ const calculateIntermediateValues = (other, x, y, axis) => {
         throw new Error("Unknown axis!");
     }
 
-    return [oMass, oX, oY, -factor]; //why - factor? why???
+    return initialVelocity - factor * interval * (G * other.mass)/((x - other.x) ** 2 + (y - other.y) ** 2);
+};
+
+const calculatePosition = (object, other, x, y, initialPosition, initialVelocity, interval, axis) => {
+    const angle = Math.atan2(y - other.y, x - other.x);
+
+    let factor;
+
+    if (axis === 'x') {
+        factor = Math.cos(angle);
+    } else if (axis === 'y') {
+        factor = Math.sin(angle);
+    } else {
+        throw new Error("Unknown axis!");
+    }
+
+    return initialPosition + initialVelocity * interval - factor * interval ** 2 * ((G * other.mass)/((x - other.x) ** 2 + (y - other.y) ** 2)) / 2;
 };
