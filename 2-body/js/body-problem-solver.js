@@ -87,8 +87,8 @@ const drawObjects = (objects) => {
     const context = canvas.getContext('2d');
 
     objects.forEach(object => {
-        const x = Number(offsetX) + Number(object.x * scaleX);
-        const y = Number(offsetY) - Number(object.y * scaleY);
+        const x = offsetX + object.x * scaleX;
+        const y = offsetY - object.y * scaleY;
         context.beginPath();
         context.fillStyle = object.color;
         context.arc(x, y, 5, 0, Math.PI * 2);
