@@ -128,27 +128,27 @@ const calculateStep = (objects, interval) => {
     const vy1 = Number(object1.vy);
     const x1 = Number(object1.x);
     const y1 = Number(object1.y);
-    object1['velocity-x-result'] = calculateVelocity(object1, object2, x1, y1, vx1, interval, 'x');
-    object1['velocity-y-result'] = calculateVelocity(object1, object2, x1, y1, vy1, interval, 'y');
-    object1['position-x-result'] = calculatePosition(object1, object2, x1, y1, x1, vx1, interval, 'x');
-    object1['position-y-result'] = calculatePosition(object1, object2, x1, y1, y1, vy1, interval, 'y');
+    object1['velocity-x-result'] = calculateVelocity(object1, object2, vx1, interval, 'x');
+    object1['velocity-y-result'] = calculateVelocity(object1, object2, vy1, interval, 'y');
+    object1['position-x-result'] = calculatePosition(object1, object2, x1, vx1, interval, 'x');
+    object1['position-y-result'] = calculatePosition(object1, object2, y1, vy1, interval, 'y');
 
     const vx2 = Number(object2.vx);
     const vy2 = Number(object2.vy);
     const x2 = Number(object2.x);
     const y2 = Number(object2.y);
-    object2['velocity-x-result'] = calculateVelocity(object1, object1, x2, y2, vx2, interval, 'x');
-    object2['velocity-y-result'] = calculateVelocity(object1, object1, x2, y2, vy2, interval, 'y');
-    object2['position-x-result'] = calculatePosition(object1, object1, x2, y2, x2, vx2, interval, 'x');
-    object2['position-y-result'] = calculatePosition(object1, object1, x2, y2, y2, vy2, interval, 'y');
+    object2['velocity-x-result'] = calculateVelocity(object2, object1, vx2, interval, 'x');
+    object2['velocity-y-result'] = calculateVelocity(object2, object1, vy2, interval, 'y');
+    object2['position-x-result'] = calculatePosition(object2, object1, x2, vx2, interval, 'x');
+    object2['position-y-result'] = calculatePosition(object2, object1, y2, vy2, interval, 'y');
 
     drawObjects(objects);
 };
 
 
 
-const calculateVelocity = (object, other, x, y, initialVelocity, interval, axis) => {
-    const angle = Math.atan2(y - other.y, x - other.x);
+const calculateVelocity = (object, other, initialVelocity, interval, axis) => {
+    const angle = Math.atan2(object.y - other.y, object.x - other.x);
 
     let factor;
 
@@ -160,11 +160,11 @@ const calculateVelocity = (object, other, x, y, initialVelocity, interval, axis)
         throw new Error("Unknown axis!");
     }
 
-    return initialVelocity - factor * interval * (G * other.mass)/((x - other.x) ** 2 + (y - other.y) ** 2);
+    return initialVelocity - factor * interval * (G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2);
 };
 
-const calculatePosition = (object, other, x, y, initialPosition, initialVelocity, interval, axis) => {
-    const angle = Math.atan2(y - other.y, x - other.x);
+const calculatePosition = (object, other, initialPosition, initialVelocity, interval, axis) => {
+    const angle = Math.atan2(object.y - other.y, object.x - other.x);
 
     let factor;
 
@@ -176,5 +176,5 @@ const calculatePosition = (object, other, x, y, initialPosition, initialVelocity
         throw new Error("Unknown axis!");
     }
 
-    return initialPosition + initialVelocity * interval - factor * interval ** 2 * ((G * other.mass)/((x - other.x) ** 2 + (y - other.y) ** 2)) / 2;
+    return initialPosition + initialVelocity * interval - factor * interval ** 2 * ((G * other.mass)/((object.x - other.x) ** 2 + (object.y - other.y) ** 2)) / 2;
 };
