@@ -17,7 +17,7 @@
           <div class="col" id="body-1">
             <div class="row">
                 <p>Body 1</p>
-                <select id="color-1" oninput="handleFormInput()">
+                <select id="color-1" onchange="handleFormInput()">
                     <option value="blue">Blue</option>
                     <option value="red">Red</option>
                     <option value="green">Green</option>
@@ -44,7 +44,7 @@
                 <input name="velocity-y-1" type="number" class="form-control" aria-describedby="velocity-y-1" placeholder="Y velocity"  oninput="handleFormInput()">
             </div>
           </div>
-          <div class="col" id="body-2">
+          <div class="col" id="body-2" onchange="handleFormInput()">
             <div class="row">
                 <p>Body 2</p>
                 <select id="color-2">
