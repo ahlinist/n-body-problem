@@ -53,19 +53,18 @@ const buildCanvas = (form, objects) => {
 
     const context = canvas.getContext('2d');
 
-    const minX = parseFloat(form.querySelector('input[name=x-min]').value) || 0;
-    const maxX = parseFloat(form.querySelector('input[name=x-max]').value) || 0;
-    const minY = parseFloat(form.querySelector('input[name=y-min]').value) || 0;
-    const maxY = parseFloat(form.querySelector('input[name=y-max]').value) || 0;
+    const minX = Math.min(objects[0].x, objects[1].x) || 0;
+    const maxX = Math.max(objects[0].x, objects[1].x) || 0;
+    const minY = Math.min(objects[0].y, objects[1].y) || 0;
+    const maxY = Math.max(objects[0].y, objects[1].y) || 0;
+    const maxDimension = Math.max(maxX - minX, maxY - minY) * 1.5 || 10;
 
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
     // Set the graph parameters
-    const xRange = maxX - minX || 10;
-    const yRange = maxY - minY || 10;
-    scaleX = canvasWidth / xRange;
-    scaleY = canvasHeight / yRange;
+    scaleX = canvasWidth / maxDimension;
+    scaleY = canvasHeight / maxDimension;
     offsetX = canvasWidth / 2;
     offsetY = canvasHeight / 2;
 

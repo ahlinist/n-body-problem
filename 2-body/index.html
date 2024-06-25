@@ -81,23 +81,9 @@
             <div class="col"></div>
             <div class="col">
                 <div class="row">
-                    <input name="x-min" type="number" class="form-control" aria-describedby="x-min" placeholder="Min x, m" oninput="handleFormInput()">
-                </div>
-                <div class="row">
-                    <input name="x-max" type="number" class="form-control" aria-describedby="x-max" placeholder="Max x, m" oninput="handleFormInput()">
-                </div>
-                <div class="row">
-                    <input name="y-min" type="number" class="form-control" aria-describedby="y-min" placeholder="Min y, m" oninput="handleFormInput()">
-                </div>
-                <div class="row">
-                    <input name="y-max" type="number" class="form-control" aria-describedby="y-max" placeholder="Max y, m" oninput="handleFormInput()">
-                </div>
-            </div>
-            <div class="col">
-                <div class="row">
                     <button style="width: 150px;" onclick="startAnimation(); event.preventDefault()">Start Animation</button>
                     &nbsp;precision:&nbsp;<input style="width: 70px;" id="precision-multiplier" type="number" min="1" class="form-control" placeholder="1" step="1">
-                    &nbsp;speed:&nbsp;<input style="width: 70px;" id="speed-multiplier" type="number" class="form-control" placeholder="1" step="1">
+                    &nbsp;speed:&nbsp;<input style="width: 70px;" id="speed-multiplier" type="number" min="1" class="form-control" placeholder="1" step="1">
                 </div>
                 <div class="row">
                     <button style="width: 150px;" onclick="runSimulation(); event.preventDefault()">Run Simulation</button>
