@@ -139,13 +139,14 @@ const move = (object, other, interval) => {
 };
 
 const runSimulation = () => {
-    const time = parseFloat(document.querySelector("input#simulation-time").value);
-    const stepSize = 1/1000;
     const objects = handleFormInput();
+    const time = parseFloat(document.querySelector("input#simulation-time").value);
+    const stepSize = 1 / 10000;
+    const stepsPerIteration = 1;
     let totalElapsed = 0;
 
     while (totalElapsed < time) {
-        calculateStep(objects, stepSize);
+        calculateStep(objects, stepSize, stepsPerIteration);
         totalElapsed += stepSize;
     }
 };
