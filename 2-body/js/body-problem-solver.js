@@ -102,16 +102,25 @@ const clearCanvas = (canvas) => {
 
 const startAnimation = () => {
     const objects = handleFormInput();
-    const interval = 1;
-    setInterval(() => calculateStep(objects, interval / 250), interval * 4);
+    const customPrecisionMultiplier = parseInt(document.querySelector("input#precision-multiplier").value) || 1;
+    const speedMultiplier = parseInt(document.querySelector("input#speed-multiplier").value) || 1;
+    const interval = 4; // ms
+    const basePrecisionMultiplier = 1000;
+    const precisionMultiplier = basePrecisionMultiplier * customPrecisionMultiplier;
+    const stepSize = interval / (1000 * precisionMultiplier); // 4*10^-6 s
+    const stepsPerIteration = precisionMultiplier * speedMultiplier;
+
+    setInterval(() => calculateStep(objects, stepSize, stepsPerIteration), interval); //fires every 4 ms
 };
 
-const calculateStep = (objects, interval) => {
-    const object1 = objects[0];
-    const object2 = objects[1];
-    objects[0] = move(object1, object2, interval);
-    objects[1] = move(object2, object1, interval);
-
+const calculateStep = (objects, stepSize, stepsPerIteration) => {
+    for (let i = 0; i < stepsPerIteration; i++) {
+        const object1 = objects[0];
+        const object2 = objects[1];
+        objects[0] = move(object1, object2, stepSize);
+        objects[1] = move(object2, object1, stepSize);
+    }
+    
     drawObjects(objects);
 };
 
