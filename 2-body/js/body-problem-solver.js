@@ -107,8 +107,8 @@ const startAnimation = () => {
     const interval = 4; // ms
     const basePrecisionMultiplier = 1000;
     const precisionMultiplier = basePrecisionMultiplier * customPrecisionMultiplier;
-    const stepSize = interval / (1000 * precisionMultiplier); // 4*10^-6 s
-    const stepsPerIteration = precisionMultiplier * speedMultiplier;
+    const stepSize = 1 / (1000 * precisionMultiplier); // base step = 10^-6 s
+    const stepsPerIteration = precisionMultiplier * speedMultiplier * interval;
 
     setInterval(() => calculateStep(objects, stepSize, stepsPerIteration), interval); //fires every 4 ms
 };
