@@ -69,7 +69,7 @@ const drawObjects = (objects) => {
         const y = offsetY - object.y * scaleY;
         context.beginPath();
         context.fillStyle = object.color;
-        context.arc(x, y, 5, 0, Math.PI * 2);
+        context.arc(x, y, 4, 0, Math.PI * 2);
         context.fill();
         context.stroke();
     });
@@ -191,6 +191,22 @@ const fillCircularPreset = () => {
     form.querySelector("input[name=position-y-2]").value = 0;
     form.querySelector("input[name=velocity-x-2]").value = 0;
     form.querySelector("input[name=velocity-y-2]").value = 2.58;
+
+    handleFormInput();
+};
+
+const fillParabolaPreset = () => {
+    form.querySelector("input[name=mass-1]").value = 100000000000;
+    form.querySelector("input[name=position-x-1]").value = 0;
+    form.querySelector("input[name=position-y-1]").value = 0;
+    form.querySelector("input[name=velocity-x-1]").value = 0;
+    form.querySelector("input[name=velocity-y-1]").value = 0;
+
+    form.querySelector("input[name=mass-2]").value = 1;
+    form.querySelector("input[name=position-x-2]").value = 1;
+    form.querySelector("input[name=position-y-2]").value = 0;
+    form.querySelector("input[name=velocity-x-2]").value = 0;
+    form.querySelector("input[name=velocity-y-2]").value = 3.65;
 
     handleFormInput();
 };
