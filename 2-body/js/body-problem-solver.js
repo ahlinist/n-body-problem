@@ -9,6 +9,8 @@ const canvas = document.getElementById('graphCanvas');
 const form = document.querySelector("form#parameter-form");
 
 const handleFormInput = () => {
+    const timerId = document.querySelector("div#timer-id").innerHTML;
+    clearTimeout(timerId);
     const objects = buildObjects(form);
     buildCanvas(form, objects);
     return objects;
@@ -90,7 +92,8 @@ const startAnimation = () => {
     const stepSize = 1 / (1000 * precisionMultiplier); // base step = 10^-6 s
     const stepsPerIteration = precisionMultiplier * speedMultiplier * interval;
 
-    setInterval(() => calculateStep(objects, stepSize, stepsPerIteration), interval); //fires every 4 ms
+    const timerId = setInterval(() => calculateStep(objects, stepSize, stepsPerIteration), interval); //fires every 4 ms
+    document.querySelector("div#timer-id").innerHTML = timerId;
 };
 
 const calculateStep = (objects, stepSize, stepsPerIteration) => {
