@@ -38,7 +38,7 @@ const buildCanvas = (form, objects) => {
     const maxX = Math.max(objects[0].x, objects[1].x) || 0;
     const minY = Math.min(objects[0].y, objects[1].y) || 0;
     const maxY = Math.max(objects[0].y, objects[1].y) || 0;
-    const maxDimension = Math.max(maxX - minX, maxY - minY) * 1.5 || 10;
+    const maxDimension = Math.max(maxX - minX, maxY - minY) * 3.5 || 10;
 
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
@@ -175,6 +175,22 @@ const fillEllipticPreset = () => {
     form.querySelector("input[name=position-y-2]").value = 0;
     form.querySelector("input[name=velocity-x-2]").value = 0;
     form.querySelector("input[name=velocity-y-2]").value = 0.2;
+
+    handleFormInput();
+};
+
+const fillCircularPreset = () => {
+    form.querySelector("input[name=mass-1]").value = 100000000000;
+    form.querySelector("input[name=position-x-1]").value = 0;
+    form.querySelector("input[name=position-y-1]").value = 0;
+    form.querySelector("input[name=velocity-x-1]").value = 0;
+    form.querySelector("input[name=velocity-y-1]").value = 0;
+
+    form.querySelector("input[name=mass-2]").value = 1;
+    form.querySelector("input[name=position-x-2]").value = 1;
+    form.querySelector("input[name=position-y-2]").value = 0;
+    form.querySelector("input[name=velocity-x-2]").value = 0;
+    form.querySelector("input[name=velocity-y-2]").value = 2.58;
 
     handleFormInput();
 };
