@@ -6,26 +6,12 @@ let offsetX;
 let offsetY;
 
 const canvas = document.getElementById('graphCanvas');
+const form = document.querySelector("form#parameter-form");
 
 const handleFormInput = () => {
-    const form = document.querySelector("form#parameter-form");
     const objects = buildObjects(form);
     buildCanvas(form, objects);
     return objects;
-}
-
-const validateInput = (form) => {
-    const errorBox = document.querySelector("p#error-message");
-    let errorMessage = "";
-    const emptyMassInputs = Array.from(form.querySelectorAll('input[name^="mass-"]'))
-        .filter(input => input.value.trim() === '');
-
-    if (emptyMassInputs.length) {
-        errorMessage += "Provide mass values<br>"
-    }
-
-    errorBox.innerHTML = errorMessage;
-    return errorMessage ? false : true;
 }
 
 const buildObjects = (form) => {
@@ -34,7 +20,7 @@ const buildObjects = (form) => {
             const object = {};
             const index = column.id.slice(column.id.indexOf('-') + 1);
             return {
-                mass: parseFloat(column.querySelector(`input[name=mass-${index}]`).value),
+                mass: parseFloat(column.querySelector(`input[name=mass-${index}]`).value) || 1,
                 x: parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0,
                 y: parseFloat(column.querySelector(`input[name=position-y-${index}]`).value) || 0,
                 vx: parseFloat(column.querySelector(`input[name=velocity-x-${index}]`).value) || 0,
@@ -46,11 +32,6 @@ const buildObjects = (form) => {
 
 const buildCanvas = (form, objects) => {
     clearCanvas(canvas);
-
-    if (!validateInput(form)) {
-        return;
-    }
-
     const context = canvas.getContext('2d');
 
     const minX = Math.min(objects[0].x, objects[1].x) || 0;
@@ -148,6 +129,38 @@ const runSimulation = () => {
         calculateStep(objects, stepSize, stepsPerIteration);
         totalElapsed += stepSize * stepsPerIteration;
     }
+};
+
+const fillTwinSystemPreset = () => {
+    form.querySelector("input[name=mass-1]").value = 10000000000;
+    form.querySelector("input[name=position-x-1]").value = -1;
+    form.querySelector("input[name=position-y-1]").value;
+    form.querySelector("input[name=velocity-x-1]").value;
+    form.querySelector("input[name=velocity-y-1]").value = -0.3;
+
+    form.querySelector("input[name=mass-2]").value = 10000000000;
+    form.querySelector("input[name=position-x-2]").value = 1;
+    form.querySelector("input[name=position-y-2]").value;
+    form.querySelector("input[name=velocity-x-2]").value;
+    form.querySelector("input[name=velocity-y-2]").value = 0.3;
+
+    handleFormInput();
+};
+
+const fillFlyingTwinsPreset = () => {
+    form.querySelector("input[name=mass-1]").value = 100000000000;
+    form.querySelector("input[name=position-x-1]").value = -1;
+    form.querySelector("input[name=position-y-1]").value = 0;
+    form.querySelector("input[name=velocity-x-1]").value = 0;
+    form.querySelector("input[name=velocity-y-1]").value = -0.3;
+
+    form.querySelector("input[name=mass-2]").value = 100000000000;
+    form.querySelector("input[name=position-x-2]").value = 1;
+    form.querySelector("input[name=position-y-2]").value = 0;
+    form.querySelector("input[name=velocity-x-2]").value = 0;
+    form.querySelector("input[name=velocity-y-2]").value = 0.4;
+
+    handleFormInput();
 };
 
 handleFormInput();

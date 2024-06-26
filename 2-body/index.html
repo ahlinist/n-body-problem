@@ -13,10 +13,20 @@
 
     <form id="parameter-form">
         <div class="row">
-          <div class="col"></div>
+          <div class="col">
+            <p class="text-center">Presets</p>
+            <div class="row">
+                <p class="text-center"><button style="width: 180px;" onclick="fillCircularPreset(); event.preventDefault()">Circular orbit</button></p>
+                <p class="text-center"><button style="width: 180px;" onclick="fillEllipticPreset(); event.preventDefault()">Elliptic orbit</button></p>
+                <p class="text-center"><button style="width: 180px;" onclick="fillParabolaPreset(); event.preventDefault()">Escape in parabola</button></p>
+                <p class="text-center"><button style="width: 180px;" onclick="fillHyperbolaPreset(); event.preventDefault()">Escape in hyperbola</button></p>
+                <p class="text-center"><button style="width: 180px;" onclick="fillTwinSystemPreset(); event.preventDefault()">Twin system</button></p>
+                <p class="text-center"><button style="width: 180px;" onclick="fillFlyingTwinsPreset(); event.preventDefault()">Flying twins</button></p>
+            </div>
+          </div>
           <div class="col" id="body-1">
             <div class="row">
-                <p>Body 1</p>
+                <p class="text-center">Body 1</p>
                 <select id="color-1" onchange="handleFormInput()">
                     <option value="blue">Blue</option>
                     <option value="red">Red</option>
@@ -46,11 +56,11 @@
           </div>
           <div class="col" id="body-2" onchange="handleFormInput()">
             <div class="row">
-                <p>Body 2</p>
+                <p class="text-center">Body 2</p>
                 <select id="color-2">
+                    <option value="green">Green</option>
                     <option value="blue">Blue</option>
                     <option value="red">Red</option>
-                    <option value="green">Green</option>
                 </select>
             </div>
             <div class="row">
@@ -76,8 +86,7 @@
           </div>
           <div class="col"></div>
         </div>
-        <hr/>
-        <div class="row" id="constraints">
+        <div class="row">
             <div class="col"></div>
             <div class="col">
                 <div class="row">
@@ -93,9 +102,6 @@
             <div class="col"></div>
         </div>
       </form>
-      <div class="row">
-        <p  class="text-center" id="error-message"></p>
-      </div>
       <div class="row">
         <div class="col"></div>
         <div class="col">
