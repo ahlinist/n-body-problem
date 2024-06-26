@@ -163,4 +163,20 @@ const fillFlyingTwinsPreset = () => {
     handleFormInput();
 };
 
+const fillEllipticPreset = () => {
+    form.querySelector("input[name=mass-1]").value = 10000000000;
+    form.querySelector("input[name=position-x-1]").value = -1;
+    form.querySelector("input[name=position-y-1]").value = 0;
+    form.querySelector("input[name=velocity-x-1]").value = 0;
+    form.querySelector("input[name=velocity-y-1]").value = 0;
+
+    form.querySelector("input[name=mass-2]").value = 1;
+    form.querySelector("input[name=position-x-2]").value = 1;
+    form.querySelector("input[name=position-y-2]").value = 0;
+    form.querySelector("input[name=velocity-x-2]").value = 0;
+    form.querySelector("input[name=velocity-y-2]").value = 0.2;
+
+    handleFormInput();
+};
+
 handleFormInput();
