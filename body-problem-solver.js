@@ -84,20 +84,24 @@ const clearCanvas = (canvas) => {
 
 const startAnimation = () => {
     const objects = handleFormInput();
-    const customPrecisionMultiplier = parseInt(document.querySelector("input#precision-multiplier").value) || 1;
-    const speedMultiplier = parseInt(document.querySelector("input#speed-multiplier").value) || 1;
-    const interval = 4; // ms
-    const basePrecisionMultiplier = 1000;
-    const precisionMultiplier = basePrecisionMultiplier * customPrecisionMultiplier;
-    const stepSize = 1 / (1000 * precisionMultiplier); // base step = 10^-6 s
-    const stepsPerIteration = precisionMultiplier * speedMultiplier * interval;
+    const stepSize = parseFloat(document.querySelector("input#animation-step-size").value) || 1;
+    const speed = parseFloat(document.querySelector("input#animation-speed").value) || 1;
+    //const interval = 100; // ms
+    const minInterval = 4; //ms
+    let interval = stepSize * speed * 1000;
+    let stepsPerIteration = 1;
 
-    const timerId = setInterval(() => calculateStep(objects, stepSize, stepsPerIteration), interval); //fires every 4 ms
+    if (interval < minInterval) {
+        stepsPerIteration = minInterval / interval;
+        interval = minInterval;
+    }
+
+    const timerId = setInterval(() => calculateStep(objects, stepSize, interval, speed), interval); //fires every interval ms
     document.querySelector("div#timer-id").innerHTML = timerId;
 };
 
-const calculateStep = (objects, stepSize, stepsPerIteration) => {
-    for (let i = 0; i < stepsPerIteration; i++) {
+const calculateStep = (objects, stepSize, interval, speed) => {
+    for (let i = 0; i < interval / 1000; i += stepSize / speed) {
         const object1 = objects[0];
         const object2 = objects[1];
         objects[0] = move(object1, object2, stepSize);
@@ -147,6 +151,9 @@ const fillTwinSystemPreset = () => {
     form.querySelector("input[name=velocity-x-2]").value;
     form.querySelector("input[name=velocity-y-2]").value = 0.3;
 
+    document.querySelector('input#animation-step-size').value = 0.0000005;
+    document.querySelector('input#animation-speed').value = 1;
+    
     handleFormInput();
 };
 
@@ -162,6 +169,9 @@ const fillFlyingTwinsPreset = () => {
     form.querySelector("input[name=position-y-2]").value = 0;
     form.querySelector("input[name=velocity-x-2]").value = 0;
     form.querySelector("input[name=velocity-y-2]").value = 0.4;
+
+    document.querySelector('input#animation-step-size').value = 0.0000005;
+    document.querySelector('input#animation-speed').value = 1;
 
     handleFormInput();
 };
@@ -179,6 +189,9 @@ const fillEllipticPreset = () => {
     form.querySelector("input[name=velocity-x-2]").value = 0;
     form.querySelector("input[name=velocity-y-2]").value = 0.2;
 
+    document.querySelector('input#animation-step-size').value = 0.0000005;
+    document.querySelector('input#animation-speed').value = 1;
+    
     handleFormInput();
 };
 
@@ -195,6 +208,9 @@ const fillCircularPreset = () => {
     form.querySelector("input[name=velocity-x-2]").value = 0;
     form.querySelector("input[name=velocity-y-2]").value = 2.58;
 
+    document.querySelector('input#animation-step-size').value = 0.0000005;
+    document.querySelector('input#animation-speed').value = 1;
+    
     handleFormInput();
 };
 
@@ -211,6 +227,9 @@ const fillParabolaPreset = () => {
     form.querySelector("input[name=velocity-x-2]").value = 0;
     form.querySelector("input[name=velocity-y-2]").value = 3.65;
 
+    document.querySelector('input#animation-step-size').value = 0.0000005;
+    document.querySelector('input#animation-speed').value = 1;
+    
     handleFormInput();
 };
 
