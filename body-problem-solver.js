@@ -96,12 +96,28 @@ const startAnimation = () => {
         interval = minInterval;
     }
 
-    const timerId = setInterval(() => calculateStep(objects, stepSize, interval, speed), interval); //fires every interval ms
+    const loopUntil = interval / 1000;
+    const stepIncrement = stepSize / speed;
+
+    const timerId = setInterval(() => calculateStep(objects, stepSize, loopUntil, stepIncrement), interval); //fires every interval ms
     document.querySelector("div#timer-id").innerHTML = timerId;
 };
 
-const calculateStep = (objects, stepSize, interval, speed) => {
-    for (let i = 0; i < interval / 1000; i += stepSize / speed) {
+const runSimulation = () => {
+    const objects = handleFormInput();
+    const time = parseFloat(document.querySelector("input#simulation-time").value) || 1;
+    const stepSize = parseFloat(document.querySelector("input#simulation-step-size").value) || 1 / 1000000;
+    const stepIncrement = 1;
+    const timesPointPlotted = 10000;
+    const loopUntil = time / (stepSize * timesPointPlotted);
+
+    for (let i = 0; i < timesPointPlotted; i++) {
+        calculateStep(objects, stepSize, loopUntil, stepIncrement);
+    }
+};
+
+const calculateStep = (objects, stepSize, loopUntil, stepIncrement) => {
+    for (let i = 0; i < loopUntil; i += stepIncrement) {
         const object1 = objects[0];
         const object2 = objects[1];
         objects[0] = move(object1, object2, stepSize);
@@ -123,19 +139,6 @@ const move = (object, other, interval) => {
     const x = object.x + object.vx * interval - xProjection * acceleration * interval ** 2 / 2;
     const y = object.y + object.vy * interval - yProjection * acceleration * interval ** 2 / 2;
     return { vx, vy, x, y, mass: object.mass, color: object.color };
-};
-
-const runSimulation = () => {
-    const objects = handleFormInput();
-    const time = parseFloat(document.querySelector("input#simulation-time").value) || 1;
-    const stepSize = 1 / 1000000;
-    const stepsPerIteration = 1000;
-    let totalElapsed = 0;
-
-    while (totalElapsed < time) {
-        calculateStep(objects, stepSize, stepsPerIteration);
-        totalElapsed += stepSize * stepsPerIteration;
-    }
 };
 
 const fillTwinSystemPreset = () => {
