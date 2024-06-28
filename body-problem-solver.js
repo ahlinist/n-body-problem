@@ -86,8 +86,7 @@ const startAnimation = () => {
     const objects = handleFormInput();
     const stepSize = parseFloat(document.querySelector("input#animation-step-size").value) || 1;
     const speed = parseFloat(document.querySelector("input#animation-speed").value) || 1;
-    //const interval = 100; // ms
-    const minInterval = 4; //ms
+    const minInterval = 10; //ms
     let interval = stepSize * speed * 1000;
     let stepsPerIteration = 1;
 
