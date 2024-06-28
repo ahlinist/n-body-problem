@@ -104,8 +104,8 @@ const startAnimation = () => {
 
 const runSimulation = () => {
     const objects = handleFormInput();
-    const time = parseFloat(document.querySelector("input#simulation-time").value) || 1;
-    const stepSize = parseFloat(document.querySelector("input#simulation-step-size").value) || 1 / 1000000;
+    const time = parseFloat(document.querySelector("input#simulation-time").value) || 15;
+    const stepSize = parseFloat(document.querySelector("input#simulation-step-size").value) || 5e-7;
     const stepIncrement = 1;
     const timesPointPlotted = 10000;
     const loopUntil = time / (stepSize * timesPointPlotted);
@@ -155,6 +155,9 @@ const fillTwinSystemPreset = () => {
 
     document.querySelector('input#animation-step-size').value = 0.0000005;
     document.querySelector('input#animation-speed').value = 1;
+
+    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-time').value = 15;
     
     handleFormInput();
 };
@@ -175,6 +178,9 @@ const fillFlyingTwinsPreset = () => {
     document.querySelector('input#animation-step-size').value = 0.0000005;
     document.querySelector('input#animation-speed').value = 1;
 
+    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-time').value = 15;
+
     handleFormInput();
 };
 
@@ -193,6 +199,9 @@ const fillEllipticPreset = () => {
 
     document.querySelector('input#animation-step-size').value = 0.0000005;
     document.querySelector('input#animation-speed').value = 1;
+
+    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-time').value = 15;
     
     handleFormInput();
 };
@@ -212,6 +221,9 @@ const fillCircularPreset = () => {
 
     document.querySelector('input#animation-step-size').value = 0.0000005;
     document.querySelector('input#animation-speed').value = 1;
+
+    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-time').value = 15;
     
     handleFormInput();
 };
@@ -231,6 +243,9 @@ const fillParabolaPreset = () => {
 
     document.querySelector('input#animation-step-size').value = 0.0000005;
     document.querySelector('input#animation-speed').value = 1;
+
+    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-time').value = 15;
     
     handleFormInput();
 };
