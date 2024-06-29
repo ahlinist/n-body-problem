@@ -22,7 +22,7 @@ const buildObjects = (form) => {
             const object = {};
             const index = column.id.slice(column.id.indexOf('-') + 1);
             return {
-                mass: parseFloat(column.querySelector(`input[name=mass-${index}]`).value) || 1,
+                mass: parseFloat(column.querySelector(`input[name=mass-${index}]`).value) || 0,
                 x: parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0,
                 y: parseFloat(column.querySelector(`input[name=position-y-${index}]`).value) || 0,
                 vx: parseFloat(column.querySelector(`input[name=velocity-x-${index}]`).value) || 0,
@@ -30,16 +30,17 @@ const buildObjects = (form) => {
                 color: column.querySelector(`select`).value || 'blue',
             };
         })
+        .filter(object => object.mass > 0);
 };
 
 const buildCanvas = (form, objects) => {
     clearCanvas(canvas);
     const context = canvas.getContext('2d');
 
-    const minX = Math.min(objects[0].x, objects[1].x) || 0;
-    const maxX = Math.max(objects[0].x, objects[1].x) || 0;
-    const minY = Math.min(objects[0].y, objects[1].y) || 0;
-    const maxY = Math.max(objects[0].y, objects[1].y) || 0;
+    const minX = Math.min(...objects.map(object => object.x)) || 0;
+    const maxX = Math.max(...objects.map(object => object.x)) || 0;
+    const minY = Math.min(...objects.map(object => object.y)) || 0;
+    const maxY = Math.max(...objects.map(object => object.y)) || 0;
     const maxDimension = Math.max(maxX - minX, maxY - minY) * 3.5 || 10;
 
     const canvasWidth = canvas.width;
