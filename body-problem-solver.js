@@ -118,17 +118,19 @@ const calculateStep = (objects, stepSize, loopUntil, stepIncrement) => {
     for (let i = 0; i < loopUntil; i += stepIncrement) {
         const object1 = objects[0];
         const object2 = objects[1];
-        objects[0] = move(object1, object2, stepSize);
-        objects[1] = move(object2, object1, stepSize);
+        const object3 = objects[2];
+        objects[0] = move(object1, object2, object3, stepSize);
+        objects[1] = move(object2, object1, object3, stepSize);
+        objects[3] = move(object3, object1, object2, stepSize);
     }
     
     drawObjects(objects);
 };
 
-const move = (object, other, interval) => {
-    const distanceSquared = (object.x - other.x) ** 2 + (object.y - other.y) ** 2;
-    const acceleration = (G * other.mass) / distanceSquared;
-    const angle = Math.atan2(object.y - other.y, object.x - other.x);
+const move = (object, other1, other2, interval) => {
+    const distanceSquared = (object.x - other1.x) ** 2 + (object.y - other1.y) ** 2;
+    const acceleration = (G * other1.mass) / distanceSquared;
+    const angle = Math.atan2(object.y - other1.y, object.x - other1.x);
     const xProjection = Math.cos(angle);
     const yProjection = Math.sin(angle);
 
