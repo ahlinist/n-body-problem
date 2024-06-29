@@ -121,23 +121,27 @@ const calculateStep = (objects, stepSize, loopUntil, stepIncrement) => {
         const object3 = objects[2];
         objects[0] = move(object1, object2, object3, stepSize);
         objects[1] = move(object2, object1, object3, stepSize);
-        objects[3] = move(object3, object1, object2, stepSize);
+        objects[2] = move(object3, object1, object2, stepSize);
     }
-    
+
     drawObjects(objects);
 };
 
 const move = (object, other1, other2, interval) => {
-    const distanceSquared = (object.x - other1.x) ** 2 + (object.y - other1.y) ** 2;
-    const acceleration = (G * other1.mass) / distanceSquared;
-    const angle = Math.atan2(object.y - other1.y, object.x - other1.x);
-    const xProjection = Math.cos(angle);
-    const yProjection = Math.sin(angle);
+    const distanceSquared1 = (object.x - other1.x) ** 2 + (object.y - other1.y) ** 2;
+    const angle1 = Math.atan2(object.y - other1.y, object.x - other1.x);
+    const acceleration1x = Math.cos(angle1) * (G * other1.mass) / distanceSquared1;
+    const acceleration1y = Math.sin(angle1) * (G * other1.mass) / distanceSquared1;
 
-    const vx = object.vx - xProjection * interval * acceleration;
-    const vy = object.vy - yProjection * interval * acceleration;
-    const x = object.x + object.vx * interval - xProjection * acceleration * interval ** 2 / 2;
-    const y = object.y + object.vy * interval - yProjection * acceleration * interval ** 2 / 2;
+    const distanceSquared2 = (object.x - other2.x) ** 2 + (object.y - other2.y) ** 2;
+    const angle2 = Math.atan2(object.y - other2.y, object.x - other2.x);
+    const acceleration2x = Math.cos(angle2) * (G * other2.mass) / distanceSquared2;
+    const acceleration2y = Math.sin(angle2) * (G * other2.mass) / distanceSquared2;
+
+    const vx = object.vx - (acceleration1x + acceleration2x) * interval;
+    const vy = object.vy - (acceleration1y + acceleration2y) * interval;
+    const x = object.x + object.vx * interval - (acceleration1x + acceleration2x) * interval ** 2 / 2;
+    const y = object.y + object.vy * interval - (acceleration1y + acceleration2y)* interval ** 2 / 2 ;
     return { vx, vy, x, y, mass: object.mass, color: object.color };
 };
 
