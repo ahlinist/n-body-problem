@@ -5,11 +5,12 @@ let scaleY;
 let offsetX;
 let offsetY;
 
+let timerId;
+
 const canvas = document.getElementById('graphCanvas');
 const form = document.querySelector("form#parameter-form");
 
 const handleFormInput = () => {
-    const timerId = document.querySelector("div#timer-id").innerHTML;
     clearTimeout(timerId);
     const objects = buildObjects(form);
     buildCanvas(form, objects);
@@ -89,18 +90,15 @@ const startAnimation = () => {
     const speed = parseFloat(document.querySelector("input#animation-speed").value) || 1;
     const minInterval = 10; //ms
     let interval = stepSize * speed * 1000;
-    let stepsPerIteration = 1;
 
     if (interval < minInterval) {
-        stepsPerIteration = minInterval / interval;
         interval = minInterval;
     }
 
     const loopUntil = interval / 1000;
     const stepIncrement = stepSize / speed;
 
-    const timerId = setInterval(() => calculateStep(objects, stepSize, loopUntil, stepIncrement), interval); //fires every interval ms
-    document.querySelector("div#timer-id").innerHTML = timerId;
+    timerId = setInterval(() => calculateStep(objects, stepSize, loopUntil, stepIncrement), interval); //fires every <interval> ms
 };
 
 const runSimulation = () => {
