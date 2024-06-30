@@ -117,45 +117,19 @@ const runSimulation = () => {
 
 const calculateStep = (objects, stepSize, loopUntil, stepIncrement) => {
     for (let i = 0; i < loopUntil; i += stepIncrement) {
-        const object1 = objects[0];
-        const object2 = objects[1];
-        const object3 = objects[2];
-        objects[0] = move(object1, object2, object3, stepSize);
-        objects[1] = move(object2, object1, object3, stepSize);
-        objects[2] = move(object3, object1, object2, stepSize);
+        move(objects, stepSize);
     }
 
     drawObjects(objects);
 };
 
-const move = (object, other1, other2, interval) => {
-    const distanceSquared1 = (object.x - other1.x) ** 2 + (object.y - other1.y) ** 2;
-    const angle1 = Math.atan2(object.y - other1.y, object.x - other1.x);
-    const acceleration1x = Math.cos(angle1) * (G * other1.mass) / distanceSquared1;
-    const acceleration1y = Math.sin(angle1) * (G * other1.mass) / distanceSquared1;
-
-    const distanceSquared2 = (object.x - other2.x) ** 2 + (object.y - other2.y) ** 2;
-    const angle2 = Math.atan2(object.y - other2.y, object.x - other2.x);
-    const acceleration2x = Math.cos(angle2) * (G * other2.mass) / distanceSquared2;
-    const acceleration2y = Math.sin(angle2) * (G * other2.mass) / distanceSquared2;
-
-    const velocityChangeX = (acceleration1x + acceleration2x) * interval;
-    const velocityChangeY = (acceleration1y + acceleration2y) * interval;
-
-    const vx = object.vx - velocityChangeX;
-    const vy = object.vy - velocityChangeY;
-    const x = object.x + object.vx * interval - velocityChangeX * interval / 2;
-    const y = object.y + object.vy * interval - velocityChangeY * interval / 2 ;
-    return { index: object.index, vx, vy, x, y, mass: object.mass, color: object.color };
-};
-
-const calculateAccelerations = (objects, interval) => {
-    const result = {};
+const move = (objects, interval) => {
+    const result = [];
 
     for (const currentObject of objects) {
         const index = currentObject.index;
-        const velocityChangeX = 0;
-        const velocityChangeY = 0;
+        let velocityChangeX = 0;
+        let velocityChangeY = 0;
         const halfInterval = interval / 2;
         
         for (const object of objects) {
@@ -188,8 +162,8 @@ const calculateAccelerations = (objects, interval) => {
         });
     }
 
-    for (const object of objects) {
-        object = result.find(body => body.index === object.index);
+    for (let i = 0; i < objects.length; i++) {
+        objects[i] = result.find(body => body.index === objects[i].index);
     }
 };
 
