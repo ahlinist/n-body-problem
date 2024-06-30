@@ -149,11 +149,47 @@ const move = (object, other1, other2, interval) => {
     return { index: object.index, vx, vy, x, y, mass: object.mass, color: object.color };
 };
 
-const calculateAccelerations = (objects) => {
-    for (const object of objects) {
-        if (object.index === 1) {
+const calculateAccelerations = (objects, interval) => {
+    const result = {};
 
+    for (const currentObject of objects) {
+        const index = currentObject.index;
+        const velocityChangeX = 0;
+        const velocityChangeY = 0;
+        const halfInterval = interval / 2;
+        
+        for (const object of objects) {
+            if (object.index === index) {
+                continue;
+            }
+
+            const distanceX = currentObject.x - object.x;
+            const distanceY = currentObject.y - object.y;
+            const distanceSquared = distanceX ** 2 + distanceY ** 2;
+            const angle = Math.atan2(distanceY, distanceX);
+            const velocity = interval * (G * object.mass) / distanceSquared;
+            velocityChangeX += Math.cos(angle) * velocity;
+            velocityChangeY += Math.sin(angle) * velocity;
         }
+
+        const vx = currentObject.vx - velocityChangeX;
+        const vy = currentObject.vy - velocityChangeY;
+        const x = currentObject.x + currentObject.vx * interval - velocityChangeX * halfInterval;
+        const y = currentObject.y + currentObject.vy * interval - velocityChangeY * halfInterval;
+
+        result.push({
+            index,
+            mass: currentObject.mass,
+            color: currentObject.color,
+            x,
+            y,
+            vx,
+            vy,
+        });
+    }
+
+    for (const object of objects) {
+        object = result.find(body => body.index === object.index);
     }
 };
 
