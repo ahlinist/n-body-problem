@@ -22,9 +22,10 @@ const buildObjects = (form) => {
         .map(column => {
             const object = {};
             const index = column.id.slice(column.id.indexOf('-') + 1);
+            const mass = parseFloat(column.querySelector(`input[name=mass-${index}]`).value) || 0;
             return {
                 index,
-                mass: parseFloat(column.querySelector(`input[name=mass-${index}]`).value) || 0,
+                gravitationalParameter: mass * G,
                 x: parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0,
                 y: parseFloat(column.querySelector(`input[name=position-y-${index}]`).value) || 0,
                 vx: parseFloat(column.querySelector(`input[name=velocity-x-${index}]`).value) || 0,
@@ -32,7 +33,7 @@ const buildObjects = (form) => {
                 color: column.querySelector(`select`).value || 'blue',
             };
         })
-        .filter(object => object.mass > 0);
+        .filter(object => object.gravitationalParameter > 0);
 };
 
 const buildCanvas = (form, objects) => {
@@ -141,7 +142,7 @@ const move = (objects, interval) => {
             const distanceY = currentObject.y - object.y;
             const distanceSquared = distanceX ** 2 + distanceY ** 2;
             const angle = Math.atan2(distanceY, distanceX);
-            const velocity = interval * (G * object.mass) / distanceSquared;
+            const velocity = interval * object.gravitationalParameter / distanceSquared;
             velocityChangeX += Math.cos(angle) * velocity;
             velocityChangeY += Math.sin(angle) * velocity;
         }
@@ -153,7 +154,7 @@ const move = (objects, interval) => {
 
         result.push({
             index,
-            mass: currentObject.mass,
+            gravitationalParameter: currentObject.gravitationalParameter,
             color: currentObject.color,
             x,
             y,
