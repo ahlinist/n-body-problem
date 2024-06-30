@@ -102,8 +102,9 @@ const startAnimation = () => {
 
     const loopUntil = interval / 1000;
     const stepIncrement = stepSize / speed;
+    const halfInterval = stepSize / 2;
 
-    timerId = setInterval(() => calculateStep(objects, stepSize, loopUntil, stepIncrement), interval); //fires every <interval> ms
+    timerId = setInterval(() => calculateStep(objects, stepSize, loopUntil, stepIncrement, halfInterval), interval); //fires every <interval> ms
 };
 
 const runSimulation = () => {
