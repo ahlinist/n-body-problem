@@ -113,28 +113,28 @@ const runSimulation = () => {
     const stepIncrement = 1;
     const timesPointPlotted = 10000;
     const loopUntil = time / (stepSize * timesPointPlotted);
+    const halfInterval = stepSize / 2;
 
     for (let i = 0; i < timesPointPlotted; i++) {
-        calculateStep(objects, stepSize, loopUntil, stepIncrement);
+        calculateStep(objects, stepSize, loopUntil, stepIncrement, halfInterval);
     }
 };
 
-const calculateStep = (objects, stepSize, loopUntil, stepIncrement) => {
+const calculateStep = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
     for (let i = 0; i < loopUntil; i += stepIncrement) {
-        move(objects, stepSize);
+        move(objects, interval, halfInterval);
     }
 
     drawObjects(objects);
 };
 
-const move = (objects, interval) => {
+const move = (objects, interval, halfInterval) => {
     const result = [];
 
     for (const currentObject of objects) {
         const index = currentObject.index;
         let velocityChangeX = 0;
         let velocityChangeY = 0;
-        const halfInterval = interval / 2;
         
         for (const object of objects) {
             if (object.index === index) {
