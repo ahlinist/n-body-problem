@@ -139,16 +139,21 @@ const move = (object, other1, other2, interval) => {
     const acceleration2x = Math.cos(angle2) * (G * other2.mass) / distanceSquared2;
     const acceleration2y = Math.sin(angle2) * (G * other2.mass) / distanceSquared2;
 
-    const vx = object.vx - (acceleration1x + acceleration2x) * interval;
-    const vy = object.vy - (acceleration1y + acceleration2y) * interval;
-    const x = object.x + object.vx * interval - (acceleration1x + acceleration2x) * interval ** 2 / 2;
-    const y = object.y + object.vy * interval - (acceleration1y + acceleration2y)* interval ** 2 / 2 ;
+    const velocityChangeX = (acceleration1x + acceleration2x) * interval;
+    const velocityChangeY = (acceleration1y + acceleration2y) * interval;
+
+    const vx = object.vx - velocityChangeX;
+    const vy = object.vy - velocityChangeY;
+    const x = object.x + object.vx * interval - velocityChangeX * interval / 2;
+    const y = object.y + object.vy * interval - velocityChangeY * interval / 2 ;
     return { index: object.index, vx, vy, x, y, mass: object.mass, color: object.color };
 };
 
 const calculateAccelerations = (objects) => {
     for (const object of objects) {
+        if (object.index === 1) {
 
+        }
     }
 };
 
