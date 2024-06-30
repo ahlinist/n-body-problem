@@ -129,17 +129,17 @@ const calculateStep = (objects, interval, loopUntil, stepIncrement, halfInterval
 };
 
 const move = (objects, interval, halfInterval) => {
-    const result = [];
+    const result = new Array(objects.length);
 
-    for (const currentObject of objects) {
+    for (let i = 0; i < objects.length; i++) {
+        const currentObject = objects[i];
         const index = currentObject.index;
         let velocityChangeX = 0;
         let velocityChangeY = 0;
         
-        for (const object of objects) {
-            if (object.index === index) {
-                continue;
-            }
+        for (let j = 0; j < objects.length; j++) {
+            if (i === j) continue;
+            const object = objects[j];
 
             const distanceX = currentObject.x - object.x;
             const distanceY = currentObject.y - object.y;
@@ -155,19 +155,11 @@ const move = (objects, interval, halfInterval) => {
         const x = currentObject.x + currentObject.vx * interval - velocityChangeX * halfInterval;
         const y = currentObject.y + currentObject.vy * interval - velocityChangeY * halfInterval;
 
-        result.push({
-            index,
-            gravitationalParameterS: currentObject.gravitationalParameterS,
-            color: currentObject.color,
-            x,
-            y,
-            vx,
-            vy,
-        });
+        result[i] = { ...currentObject, x, y, vx, vy };
     }
 
     for (let i = 0; i < objects.length; i++) {
-        objects[i] = result.find(body => body.index === objects[i].index);
+        objects[i] = result[i];
     }
 };
 
