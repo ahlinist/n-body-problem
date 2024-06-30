@@ -8,6 +8,7 @@ let offsetY;
 let timerId;
 
 const canvas = document.getElementById('graphCanvas');
+const context = canvas.getContext('2d');
 const form = document.querySelector("form#parameter-form");
 
 const handleFormInput = () => {
@@ -41,7 +42,6 @@ const buildObjects = (form) => {
 
 const buildCanvas = (form, objects) => {
     clearCanvas(canvas);
-    const context = canvas.getContext('2d');
 
     const minX = Math.min(...objects.map(object => object.x)) || 0;
     const maxX = Math.max(...objects.map(object => object.x)) || 0;
@@ -71,12 +71,10 @@ const buildCanvas = (form, objects) => {
 };
 
 const drawObjects = (objects) => {
-    const context = canvas.getContext('2d');
-
     objects.forEach(object => {
+        context.beginPath();
         const x = offsetX + object.x * scaleX;
         const y = offsetY - object.y * scaleY;
-        context.beginPath();
         context.fillStyle = object.color;
         context.arc(x, y, 4, 0, Math.PI * 2);
         context.fill();
