@@ -1,4 +1,6 @@
 const G = 6.6743e-11;
+const TWO_PI = 2 * Math.PI;
+const MIN_INTERVAL = 10; //ms
 
 let scaleX;
 let scaleY;
@@ -76,7 +78,7 @@ const drawObjects = (objects) => {
         const x = offsetX + object.x * scaleX;
         const y = offsetY - object.y * scaleY;
         context.fillStyle = object.color;
-        context.arc(x, y, 4, 0, Math.PI * 2);
+        context.arc(x, y, 4, 0, TWO_PI);
         context.fill();
         context.stroke();
     });
@@ -91,11 +93,10 @@ const startAnimation = () => {
     const objects = handleFormInput();
     const stepSize = parseFloat(document.querySelector("input#animation-step-size").value) || 1;
     const speed = parseFloat(document.querySelector("input#animation-speed").value) || 1;
-    const minInterval = 10; //ms
     let interval = stepSize * speed * 1000;
 
-    if (interval < minInterval) {
-        interval = minInterval;
+    if (interval < MIN_INTERVAL) {
+        interval = MIN_INTERVAL;
     }
 
     const loopUntil = interval / 1000;
