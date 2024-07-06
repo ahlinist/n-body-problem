@@ -136,84 +136,76 @@ const runSimulation = () => {
 
 const calculateStep2Bodies = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
     for (let i = 0; i < loopUntil; i += stepIncrement) {
-        move2Bodies(objects, interval, halfInterval);
+        const object1 = objects[0];
+        const object2 = objects[1];
+
+        const distanceX = object1.x - object2.x;
+        const distanceY = object1.y - object2.y;
+        const distanceSquared = distanceX ** 2 + distanceY ** 2;
+        const angle = Math.atan2(distanceY, distanceX);
+        const velocityChange1 = object2.gravitationalParameterS / distanceSquared;
+        const velocityChange2 = object1.gravitationalParameterS / distanceSquared;
+
+        const xProjection = Math.cos(angle);
+        const yProjection = Math.sin(angle);
+        
+        const velocityChangeX1 = xProjection * velocityChange1;
+        const velocityChangeY1 = yProjection * velocityChange1;
+        const velocityChangeX2 = -xProjection * velocityChange2;
+        const velocityChangeY2 = -yProjection * velocityChange2;
+
+        const vx1 = object1.vx - velocityChangeX1;
+        const vy1 = object1.vy - velocityChangeY1;
+        const vx2 = object2.vx - velocityChangeX2;
+        const vy2 = object2.vy - velocityChangeY2;
+        const x1 = object1.x + object1.vx * interval - velocityChangeX1 * halfInterval;
+        const y1 = object1.y + object1.vy * interval - velocityChangeY1 * halfInterval;
+        const x2 = object2.x + object2.vx * interval - velocityChangeX2 * halfInterval;
+        const y2 = object2.y + object2.vy * interval - velocityChangeY2 * halfInterval;
+
+        objects[0] = { gravitationalParameterS: object1.gravitationalParameterS, color: object1.color, x: x1, y: y1, vx: vx1, vy: vy1 };
+        objects[1] = { gravitationalParameterS: object2.gravitationalParameterS, color: object2.color, x: x2, y: y2, vx: vx2, vy: vy2 };
     }
     
     drawObjects(objects);
-};
-
-const move2Bodies = (objects, interval, halfInterval) => {
-    const object1 = objects[0];
-    const object2 = objects[1];
-
-    const distanceX = object1.x - object2.x;
-    const distanceY = object1.y - object2.y;
-    const distanceSquared = distanceX ** 2 + distanceY ** 2;
-    const angle = Math.atan2(distanceY, distanceX);
-    const velocityChange1 = object2.gravitationalParameterS / distanceSquared;
-    const velocityChange2 = object1.gravitationalParameterS / distanceSquared;
-
-    const xProjection = Math.cos(angle);
-    const yProjection = Math.sin(angle);
-    
-    const velocityChangeX1 = xProjection * velocityChange1;
-    const velocityChangeY1 = yProjection * velocityChange1;
-    const velocityChangeX2 = -xProjection * velocityChange2;
-    const velocityChangeY2 = -yProjection * velocityChange2;
-
-    const vx1 = object1.vx - velocityChangeX1;
-    const vy1 = object1.vy - velocityChangeY1;
-    const vx2 = object2.vx - velocityChangeX2;
-    const vy2 = object2.vy - velocityChangeY2;
-    const x1 = object1.x + object1.vx * interval - velocityChangeX1 * halfInterval;
-    const y1 = object1.y + object1.vy * interval - velocityChangeY1 * halfInterval;
-    const x2 = object2.x + object2.vx * interval - velocityChangeX2 * halfInterval;
-    const y2 = object2.y + object2.vy * interval - velocityChangeY2 * halfInterval;
-
-    objects[0] = { gravitationalParameterS: object1.gravitationalParameterS, color: object1.color, x: x1, y: y1, vx: vx1, vy: vy1 };
-    objects[1] = { gravitationalParameterS: object2.gravitationalParameterS, color: object2.color, x: x2, y: y2, vx: vx2, vy: vy2 };
 };
 
 const calculateStepNBodies = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
     for (let i = 0; i < loopUntil; i += stepIncrement) {
-        moveNBodies(objects, interval, halfInterval);
+        const result = new Array(objects.length);
+
+        for (let i = 0; i < objects.length; i++) {
+            const currentObject = objects[i];
+            let velocityChangeX = 0;
+            let velocityChangeY = 0;
+            
+            for (let j = 0; j < objects.length; j++) {
+                if (i === j) continue;
+                const object = objects[j];
+
+                const distanceX = currentObject.x - object.x;
+                const distanceY = currentObject.y - object.y;
+                const distanceSquared = distanceX ** 2 + distanceY ** 2;
+                const angle = Math.atan2(distanceY, distanceX);
+                const velocity = object.gravitationalParameterS / distanceSquared;
+                velocityChangeX += Math.cos(angle) * velocity;
+                velocityChangeY += Math.sin(angle) * velocity;
+            }
+
+            const vx = currentObject.vx - velocityChangeX;
+            const vy = currentObject.vy - velocityChangeY;
+            const x = currentObject.x + currentObject.vx * interval - velocityChangeX * halfInterval;
+            const y = currentObject.y + currentObject.vy * interval - velocityChangeY * halfInterval;
+
+            result[i] = { gravitationalParameterS: currentObject.gravitationalParameterS, color: currentObject.color, x, y, vx, vy };
+        }
+
+        for (let i = 0; i < objects.length; i++) {
+            objects[i] = result[i];
+        }
     }
 
     drawObjects(objects);
-};
-
-const moveNBodies = (objects, interval, halfInterval) => {
-    const result = new Array(objects.length);
-
-    for (let i = 0; i < objects.length; i++) {
-        const currentObject = objects[i];
-        let velocityChangeX = 0;
-        let velocityChangeY = 0;
-        
-        for (let j = 0; j < objects.length; j++) {
-            if (i === j) continue;
-            const object = objects[j];
-
-            const distanceX = currentObject.x - object.x;
-            const distanceY = currentObject.y - object.y;
-            const distanceSquared = distanceX ** 2 + distanceY ** 2;
-            const angle = Math.atan2(distanceY, distanceX);
-            const velocity = object.gravitationalParameterS / distanceSquared;
-            velocityChangeX += Math.cos(angle) * velocity;
-            velocityChangeY += Math.sin(angle) * velocity;
-        }
-
-        const vx = currentObject.vx - velocityChangeX;
-        const vy = currentObject.vy - velocityChangeY;
-        const x = currentObject.x + currentObject.vx * interval - velocityChangeX * halfInterval;
-        const y = currentObject.y + currentObject.vy * interval - velocityChangeY * halfInterval;
-
-        result[i] = { gravitationalParameterS: currentObject.gravitationalParameterS, color: currentObject.color, x, y, vx, vy };
-    }
-
-    for (let i = 0; i < objects.length; i++) {
-        objects[i] = result[i];
-    }
 };
 
 const fillCircularPreset = () => {
@@ -235,10 +227,10 @@ const fillCircularPreset = () => {
     form.querySelector("input[name=velocity-x-3]").value = 0;
     form.querySelector("input[name=velocity-y-3]").value = 1.83;
 
-    document.querySelector('input#animation-step-size').value = 5e-7;
+    document.querySelector('input#animation-step-size').value = 1e-6;
     document.querySelector('input#animation-speed').value = 1;
 
-    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-step-size').value = 1e-6;
     document.querySelector('input#simulation-time').value = 15;
     
     handleFormInput();
@@ -263,10 +255,10 @@ const fillEllipticPreset = () => {
     form.querySelector("input[name=velocity-x-3]").value = 0;
     form.querySelector("input[name=velocity-y-3]").value = -0.2;
 
-    document.querySelector('input#animation-step-size').value = 5e-7;
+    document.querySelector('input#animation-step-size').value = 1e-6;
     document.querySelector('input#animation-speed').value = 1;
 
-    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-step-size').value = 1e-6;
     document.querySelector('input#simulation-time').value = 15;
     
     handleFormInput();
@@ -291,10 +283,10 @@ const fillParabolaPreset = () => {
     form.querySelector("input[name=velocity-x-3]").value = 0;
     form.querySelector("input[name=velocity-y-3]").value = -3.65;
 
-    document.querySelector('input#animation-step-size').value = 5e-7;
+    document.querySelector('input#animation-step-size').value = 1e-6;
     document.querySelector('input#animation-speed').value = 1;
 
-    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-step-size').value = 1e-6;
     document.querySelector('input#simulation-time').value = 15;
     
     handleFormInput();
@@ -319,10 +311,10 @@ const fillTripleSystemPreset = () => {
     form.querySelector("input[name=velocity-x-3]").value;
     form.querySelector("input[name=velocity-y-3]").value = 0.58;
 
-    document.querySelector('input#animation-step-size').value = 5e-7;
+    document.querySelector('input#animation-step-size').value = 1e-6;
     document.querySelector('input#animation-speed').value = 1;
 
-    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-step-size').value = 1e-6;
     document.querySelector('input#simulation-time').value = 15;
     
     handleFormInput();
@@ -347,10 +339,10 @@ const fillChaosPreset = () => {
     form.querySelector("input[name=velocity-x-3]").value = -0.1;
     form.querySelector("input[name=velocity-y-3]").value = -0.4;
 
-    document.querySelector('input#animation-step-size').value = 5e-7;
+    document.querySelector('input#animation-step-size').value = 1e-6;
     document.querySelector('input#animation-speed').value = 1;
 
-    document.querySelector('input#simulation-step-size').value = 5e-7;
+    document.querySelector('input#simulation-step-size').value = 1e-6;
     document.querySelector('input#simulation-time').value = 15;
 
     handleFormInput();
