@@ -29,7 +29,6 @@ const buildObjects = (form) => {
             const mass = parseFloat(column.querySelector(`input[name=mass-${index}]`).value) || 0;
 
             return {
-                index,
                 mass,
                 gravitationalParameterS: mass * G * stepSize,
                 x: parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0,
@@ -103,7 +102,20 @@ const startAnimation = () => {
     const stepIncrement = stepSize / speed;
     const halfInterval = stepSize / 2;
 
-    timerId = setInterval(() => calculateStep(objects, stepSize, loopUntil, stepIncrement, halfInterval), interval); //fires every <interval> ms
+    let calculateStepFn;
+
+    switch(objects.length) {
+        case 2:
+            calculateStepFn = () => calculateStep2Bodies(objects, stepSize, loopUntil, stepIncrement, halfInterval);
+            break;
+        //case 3:
+          // code block
+        //    break;
+        default:
+            calculateStepFn = () => calculateStepNBodies(objects, stepSize, loopUntil, stepIncrement, halfInterval);
+    } 
+
+    timerId = setInterval(calculateStepFn, interval); //fires every <interval> ms
 };
 
 const runSimulation = () => {
@@ -120,20 +132,59 @@ const runSimulation = () => {
     }
 };
 
-const calculateStep = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
+const calculateStep2Bodies = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
     for (let i = 0; i < loopUntil; i += stepIncrement) {
-        move(objects, interval, halfInterval);
+        move2Bodies(objects, interval, halfInterval);
+    }
+    
+    drawObjects(objects);
+};
+
+const move2Bodies = (objects, interval, halfInterval) => {
+    const object1 = objects[0];
+    const object2 = objects[1];
+
+    const distanceX = object1.x - object2.x;
+    const distanceY = object1.y - object2.y;
+    const distanceSquared = distanceX ** 2 + distanceY ** 2;
+    const angle = Math.atan2(distanceY, distanceX);
+    const velocityChange1 = object2.gravitationalParameterS / distanceSquared;
+    const velocityChange2 = object1.gravitationalParameterS / distanceSquared;
+
+    const xProjection = Math.cos(angle);
+    const yProjection = Math.sin(angle);
+    
+    const velocityChangeX1 = xProjection * velocityChange1;
+    const velocityChangeY1 = yProjection * velocityChange1;
+    const velocityChangeX2 = -xProjection * velocityChange2;
+    const velocityChangeY2 = -yProjection * velocityChange2;
+
+    const vx1 = object1.vx - velocityChangeX1;
+    const vy1 = object1.vy - velocityChangeY1;
+    const vx2 = object2.vx - velocityChangeX2;
+    const vy2 = object2.vy - velocityChangeY2;
+    const x1 = object1.x + object1.vx * interval - velocityChangeX1 * halfInterval;
+    const y1 = object1.y + object1.vy * interval - velocityChangeY1 * halfInterval;
+    const x2 = object2.x + object2.vx * interval - velocityChangeX2 * halfInterval;
+    const y2 = object2.y + object2.vy * interval - velocityChangeY2 * halfInterval;
+
+    objects[0] = { gravitationalParameterS: object1.gravitationalParameterS, color: object1.color, x: x1, y: y1, vx: vx1, vy: vy1 };
+    objects[1] = { gravitationalParameterS: object2.gravitationalParameterS, color: object2.color, x: x2, y: y2, vx: vx2, vy: vy2 };
+};
+
+const calculateStepNBodies = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
+    for (let i = 0; i < loopUntil; i += stepIncrement) {
+        moveNBodies(objects, interval, halfInterval);
     }
 
     drawObjects(objects);
 };
 
-const move = (objects, interval, halfInterval) => {
+const moveNBodies = (objects, interval, halfInterval) => {
     const result = new Array(objects.length);
 
     for (let i = 0; i < objects.length; i++) {
         const currentObject = objects[i];
-        const index = currentObject.index;
         let velocityChangeX = 0;
         let velocityChangeY = 0;
         
@@ -155,7 +206,7 @@ const move = (objects, interval, halfInterval) => {
         const x = currentObject.x + currentObject.vx * interval - velocityChangeX * halfInterval;
         const y = currentObject.y + currentObject.vy * interval - velocityChangeY * halfInterval;
 
-        result[i] = { ...currentObject, x, y, vx, vy };
+        result[i] = { gravitationalParameterS: currentObject.gravitationalParameterS, color: currentObject.color, x, y, vx, vy };
     }
 
     for (let i = 0; i < objects.length; i++) {
