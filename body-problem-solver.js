@@ -111,9 +111,9 @@ const determineCalculateStepFunction = (objects) => {
         case 2:
             return calculateStep2Bodies;
             break;
-        //case 3:
-        //    code block
-        //    break;
+        case 3:
+            return calculateStep3Bodies;
+            break;
         default:
             return calculateStepNBodies;
     } 
@@ -163,8 +163,98 @@ const calculateStep2Bodies = (objects, interval, loopUntil, stepIncrement, halfI
         const x2 = object2.x + object2.vx * interval - velocityChangeX2 * halfInterval;
         const y2 = object2.y + object2.vy * interval - velocityChangeY2 * halfInterval;
 
-        objects[0] = { gravitationalParameterS: object1.gravitationalParameterS, color: object1.color, x: x1, y: y1, vx: vx1, vy: vy1 };
-        objects[1] = { gravitationalParameterS: object2.gravitationalParameterS, color: object2.color, x: x2, y: y2, vx: vx2, vy: vy2 };
+        objects[0] = { 
+            gravitationalParameterS: object1.gravitationalParameterS, 
+            color: object1.color, 
+            x: x1, 
+            y: y1, 
+            vx: vx1, 
+            vy: vy1 
+        };
+        objects[1] = { 
+            gravitationalParameterS: object2.gravitationalParameterS, 
+            color: object2.color, 
+            x: x2, 
+            y: y2, 
+            vx: vx2, 
+            vy: vy2 
+        };
+    }
+    
+    drawObjects(objects);
+};
+
+const calculateStep3Bodies = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
+    for (let i = 0; i < loopUntil; i += stepIncrement) {
+        const object1 = objects[0];
+        const object2 = objects[1];
+        const object3 = objects[2];
+
+        const distanceX12 = object1.x - object2.x;
+        const distanceY12 = object1.y - object2.y;
+        const distanceX13 = object1.x - object3.x;
+        const distanceY13 = object1.y - object3.y;
+        const distanceX23 = object2.x - object3.x;
+        const distanceY23 = object2.y - object3.y;
+
+        const distanceSquared12 = distanceX12 ** 2 + distanceY12 ** 2;
+        const distanceSquared13 = distanceX13 ** 2 + distanceY13 ** 2;
+        const distanceSquared23 = distanceX23 ** 2 + distanceY23 ** 2;
+        const angle12 = Math.atan2(distanceY12, distanceX12);
+        const angle13 = Math.atan2(distanceY13, distanceX13);
+        const angle23 = Math.atan2(distanceY23, distanceX23);
+
+        const xProjection12 = Math.cos(angle12);
+        const xProjection13 = Math.cos(angle13);
+        const xProjection23 = Math.cos(angle23);
+        const yProjection12 = Math.sin(angle12);
+        const yProjection13 = Math.sin(angle13);
+        const yProjection23 = Math.sin(angle23);
+
+        const velocityChangeX1 = xProjection12 * object2.gravitationalParameterS / distanceSquared12 + xProjection13 * object3.gravitationalParameterS / distanceSquared13;
+        const velocityChangeY1 = yProjection12 * object2.gravitationalParameterS / distanceSquared12 + yProjection13 * object3.gravitationalParameterS / distanceSquared13;
+        const velocityChangeX2 = - xProjection12 * object1.gravitationalParameterS / distanceSquared12 + xProjection23 * object3.gravitationalParameterS / distanceSquared23;
+        const velocityChangeY2 = - yProjection12 * object1.gravitationalParameterS / distanceSquared12 + yProjection23 * object3.gravitationalParameterS / distanceSquared23;
+        const velocityChangeX3 = - xProjection13 * object1.gravitationalParameterS / distanceSquared13 - xProjection23 * object2.gravitationalParameterS / distanceSquared23;
+        const velocityChangeY3 = - yProjection13 * object1.gravitationalParameterS / distanceSquared13 - yProjection23 * object2.gravitationalParameterS / distanceSquared23;
+
+        const vx1 = object1.vx - velocityChangeX1;
+        const vy1 = object1.vy - velocityChangeY1;
+        const vx2 = object2.vx - velocityChangeX2;
+        const vy2 = object2.vy - velocityChangeY2;
+        const vx3 = object3.vx - velocityChangeX3;
+        const vy3 = object3.vy - velocityChangeY3;
+        const x1 = object1.x + object1.vx * interval - velocityChangeX1 * halfInterval;
+        const y1 = object1.y + object1.vy * interval - velocityChangeY1 * halfInterval;
+        const x2 = object2.x + object2.vx * interval - velocityChangeX2 * halfInterval;
+        const y2 = object2.y + object2.vy * interval - velocityChangeY2 * halfInterval;
+        const x3 = object3.x + object3.vx * interval - velocityChangeX3 * halfInterval;
+        const y3 = object3.y + object3.vy * interval - velocityChangeY3 * halfInterval;
+
+        objects[0] = { 
+            gravitationalParameterS: object1.gravitationalParameterS, 
+            color: object1.color, 
+            x: x1, 
+            y: y1, 
+            vx: vx1, 
+            vy: vy1 
+        };
+        objects[1] = { 
+            gravitationalParameterS: object2.gravitationalParameterS, 
+            color: object2.color, 
+            x: x2, 
+            y: y2, 
+            vx: vx2, 
+            vy: vy2 
+        };
+        objects[2] = { 
+            gravitationalParameterS: object3.gravitationalParameterS, 
+            color: object3.color, 
+            x: x3, 
+            y: y3, 
+            vx: vx3, 
+            vy: vy3 
+        };
     }
     
     drawObjects(objects);
