@@ -101,21 +101,22 @@ const startAnimation = () => {
     const loopUntil = interval / 1000;
     const stepIncrement = stepSize / speed;
     const halfInterval = stepSize / 2;
+    const calculateStepFn = determineCalculateStepFunction(objects);
 
-    let calculateStepFn;
+    timerId = setInterval(() => calculateStepFn(objects, stepSize, loopUntil, stepIncrement, halfInterval), interval); //fires every <interval> ms
+};
 
+const determineCalculateStepFunction = (objects) => {
     switch(objects.length) {
         case 2:
-            calculateStepFn = () => calculateStep2Bodies(objects, stepSize, loopUntil, stepIncrement, halfInterval);
+            return calculateStep2Bodies;
             break;
         //case 3:
-          // code block
+        //    code block
         //    break;
         default:
-            calculateStepFn = () => calculateStepNBodies(objects, stepSize, loopUntil, stepIncrement, halfInterval);
+            return calculateStepNBodies;
     } 
-
-    timerId = setInterval(calculateStepFn, interval); //fires every <interval> ms
 };
 
 const runSimulation = () => {
@@ -126,9 +127,10 @@ const runSimulation = () => {
     const timesPointPlotted = 10000;
     const loopUntil = time / (stepSize * timesPointPlotted);
     const halfInterval = stepSize / 2;
+    const calculateStepFn = determineCalculateStepFunction(objects);
 
     for (let i = 0; i < timesPointPlotted; i++) {
-        calculateStep(objects, stepSize, loopUntil, stepIncrement, halfInterval);
+        calculateStepFn(objects, stepSize, loopUntil, stepIncrement, halfInterval);
     }
 };
 
