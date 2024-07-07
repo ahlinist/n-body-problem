@@ -103,7 +103,7 @@ const startAnimation = () => {
     const halfStepSize = stepSize / 2;
     const calculateStepFn = determineCalculateStepFunction(objects);
 
-    timerId = setInterval(() => calculateStepFn(objects, stepSize, loopUntil, halfStepSize), interval); //fires every <interval> ms
+    timerId = setInterval(() => calculateStepFn(objects, stepSize, loopUntil, stepSize, halfStepSize), interval); //fires every <interval> ms
 };
 
 const determineCalculateStepFunction = (objects) => {
@@ -134,8 +134,8 @@ const runSimulation = () => {
     }
 };
 
-const calculateStep2Bodies = (objects, stepSize, loopUntil, halfStepSize) => {
-    for (let i = 0; i < loopUntil; i += stepSize) {
+const calculateStep2Bodies = (objects, stepSize, loopUntil, loopIncrement, halfStepSize) => {
+    for (let i = 0; i < loopUntil; i += loopIncrement) {
         const object1 = objects[0];
         const object2 = objects[1];
 
@@ -184,8 +184,8 @@ const calculateStep2Bodies = (objects, stepSize, loopUntil, halfStepSize) => {
     drawObjects(objects);
 };
 
-const calculateStep3Bodies = (objects, stepSize, loopUntil, halfStepSize) => {
-    for (let i = 0; i < loopUntil; i += stepSize) {
+const calculateStep3Bodies = (objects, stepSize, loopUntil, loopIncrement, halfStepSize) => {
+    for (let i = 0; i < loopUntil; i += loopIncrement) {
         const object1 = objects[0];
         const object2 = objects[1];
         const object3 = objects[2];
@@ -260,8 +260,8 @@ const calculateStep3Bodies = (objects, stepSize, loopUntil, halfStepSize) => {
     drawObjects(objects);
 };
 
-const calculateStepNBodies = (objects, stepSize, loopUntil, halfStepSize) => {
-    for (let i = 0; i < loopUntil; i += stepSize) {
+const calculateStepNBodies = (objects, stepSize, loopUntil, loopIncrement, halfStepSize) => {
+    for (let i = 0; i < loopUntil; i += loopIncrement) {
         const result = new Array(objects.length);
 
         for (let i = 0; i < objects.length; i++) {
