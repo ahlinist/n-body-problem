@@ -93,18 +93,17 @@ const startAnimation = () => {
     const objects = handleFormInput();
     const stepSize = parseFloat(document.querySelector("input#step-size").value) || 1;
     const speed = parseFloat(document.querySelector("input#animation-speed").value) || 1;
-    let interval = stepSize * speed * 1000;
+    let interval = stepSize * 1000;
 
     if (interval < MIN_INTERVAL) {
         interval = MIN_INTERVAL;
     }
 
-    const loopUntil = interval / 1000;
-    const stepIncrement = stepSize / speed;
+    const loopUntil = interval * speed / 1000;
     const halfStepSize = stepSize / 2;
     const calculateStepFn = determineCalculateStepFunction(objects);
 
-    timerId = setInterval(() => calculateStepFn(objects, stepSize, loopUntil, stepIncrement, halfStepSize), interval); //fires every <interval> ms
+    timerId = setInterval(() => calculateStepFn(objects, stepSize, loopUntil, halfStepSize), interval); //fires every <interval> ms
 };
 
 const determineCalculateStepFunction = (objects) => {
@@ -135,8 +134,8 @@ const runSimulation = () => {
     }
 };
 
-const calculateStep2Bodies = (objects, stepSize, loopUntil, stepIncrement, halfStepSize) => {
-    for (let i = 0; i < loopUntil; i += stepIncrement) {
+const calculateStep2Bodies = (objects, stepSize, loopUntil, halfStepSize) => {
+    for (let i = 0; i < loopUntil; i += stepSize) {
         const object1 = objects[0];
         const object2 = objects[1];
 
@@ -185,8 +184,8 @@ const calculateStep2Bodies = (objects, stepSize, loopUntil, stepIncrement, halfS
     drawObjects(objects);
 };
 
-const calculateStep3Bodies = (objects, stepSize, loopUntil, stepIncrement, halfStepSize) => {
-    for (let i = 0; i < loopUntil; i += stepIncrement) {
+const calculateStep3Bodies = (objects, stepSize, loopUntil, halfStepSize) => {
+    for (let i = 0; i < loopUntil; i += stepSize) {
         const object1 = objects[0];
         const object2 = objects[1];
         const object3 = objects[2];
@@ -261,8 +260,8 @@ const calculateStep3Bodies = (objects, stepSize, loopUntil, stepIncrement, halfS
     drawObjects(objects);
 };
 
-const calculateStepNBodies = (objects, stepSize, loopUntil, stepIncrement, halfStepSize) => {
-    for (let i = 0; i < loopUntil; i += stepIncrement) {
+const calculateStepNBodies = (objects, stepSize, loopUntil, halfStepSize) => {
+    for (let i = 0; i < loopUntil; i += stepSize) {
         const result = new Array(objects.length);
 
         for (let i = 0; i < objects.length; i++) {
