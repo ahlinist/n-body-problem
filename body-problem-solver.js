@@ -439,6 +439,7 @@ const fillChaosPreset = () => {
 
 const deleteBody = (button) => {
     button.closest('div.body').remove();
+    handleFormInput();
 };
 
 const buildObjectForm = () => {
@@ -450,6 +451,7 @@ const buildObjectForm = () => {
     plusFormCol.remove();
     objectRow.appendChild(clonedTemplate);
     objectRow.appendChild(clonedPlusFormCol);
+    handleFormInput();
 };
 
 Array.from({length: 3}, () => buildObjectForm());
