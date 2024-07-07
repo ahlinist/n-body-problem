@@ -21,21 +21,20 @@ const handleFormInput = () => {
 }
 
 const buildObjects = (form) => {
-    const stepSize = parseFloat(document.querySelector("input#animation-step-size").value) || 1;
+    const stepSize = parseFloat(document.querySelector("input#animation-step-size").value) || 1; //TODO: animation stepSize is applied, fix for simulation
 
-    return Array.from(form.querySelectorAll('div[id^="body-"]'))
-        .map(column => {
-            const index = column.id.slice(column.id.indexOf('-') + 1);
-            const mass = parseFloat(column.querySelector(`input[name=mass-${index}]`).value) || 0;
+    return Array.from(form.querySelectorAll('div.body'))
+        .map(body => {
+            const mass = parseFloat(body.querySelector(`input[name=mass]`).value) || 0;
 
             return {
                 mass,
                 gravitationalParameterS: mass * G * stepSize,
-                x: parseFloat(column.querySelector(`input[name=position-x-${index}]`).value) || 0,
-                y: parseFloat(column.querySelector(`input[name=position-y-${index}]`).value) || 0,
-                vx: parseFloat(column.querySelector(`input[name=velocity-x-${index}]`).value) || 0,
-                vy: parseFloat(column.querySelector(`input[name=velocity-y-${index}]`).value) || 0,
-                color: column.querySelector(`select`).value || 'blue',
+                x: parseFloat(body.querySelector(`input[name=position-x]`).value) || 0,
+                y: parseFloat(body.querySelector(`input[name=position-y]`).value) || 0,
+                vx: parseFloat(body.querySelector(`input[name=velocity-x]`).value) || 0,
+                vy: parseFloat(body.querySelector(`input[name=velocity-y]`).value) || 0,
+                color: body.querySelector(`select`).value || 'blue',
             };
         })
         .filter(object => object.gravitationalParameterS > 0);
@@ -312,10 +311,10 @@ const fillCircularPreset = () => {
     form.querySelector("input[name=velocity-y-2]").value = 2.58;
 
     form.querySelector("input[name=mass-3]").value = 1;
-    form.querySelector("input[name=position-x-3]").value = 2;
-    form.querySelector("input[name=position-y-3]").value = 0;
-    form.querySelector("input[name=velocity-x-3]").value = 0;
-    form.querySelector("input[name=velocity-y-3]").value = 1.83;
+    form.querySelector("input[name=position-x-3]").value = 0;
+    form.querySelector("input[name=position-y-3]").value = 2;
+    form.querySelector("input[name=velocity-x-3]").value = 1.83;
+    form.querySelector("input[name=velocity-y-3]").value = 0;
 
     document.querySelector('input#animation-step-size').value = 1e-6;
     document.querySelector('input#animation-speed').value = 1;
@@ -437,5 +436,22 @@ const fillChaosPreset = () => {
 
     handleFormInput();
 };
+
+const deleteBody = (button) => {
+    button.closest('div.body').remove();
+};
+
+const buildObjectForm = () => {
+    const template = document.querySelector('div.body-template div');
+    const plusFormCol = document.querySelector('div.plus-form-col');
+    const clonedTemplate = template.cloneNode(true);
+    const clonedPlusFormCol = plusFormCol.cloneNode(true);
+    const objectRow = form.querySelector('div.object-row');
+    plusFormCol.remove();
+    objectRow.appendChild(clonedTemplate);
+    objectRow.appendChild(clonedPlusFormCol);
+};
+
+Array.from({length: 3}, () => buildObjectForm());
 
 handleFormInput();

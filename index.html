@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flying bodies</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <h1 class="text-center">Flying bodies</h1>
     <form id="parameter-form">
-        <div class="row">
+        <div class="row object-row">
           <div class="col">
             <p class="text-center">Presets</p>
             <div class="row">
@@ -22,97 +23,7 @@
                 <p class="text-center"><button style="width: 180px;" onclick="fillChaosPreset(); event.preventDefault()">Chaos</button></p>
             </div>
           </div>
-          <div class="col" id="body-1">
-            <div class="row">
-                <p class="text-center">Body 1</p>
-                <select id="color-1" onchange="handleFormInput()">
-                    <option value="blue">Blue</option>
-                    <option value="red">Red</option>
-                    <option value="green">Green</option>
-                </select>
-            </div>
-            <div class="row">
-                <small id="mass-1" class="form-text text-muted">Mass, kg</small>
-                <input name="mass-1" type="number" class="form-control" aria-describedby="mass-1" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="position-x-1" class="form-text text-muted">X-position, m</small>
-                <input name="position-x-1" type="number" class="form-control" aria-describedby="position-x-1" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="position-y-1" class="form-text text-muted">Y-position, m</small>
-                <input name="position-y-1" type="number" class="form-control" aria-describedby="position-y-1" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="velocity-x-1" class="form-text text-muted">X-velocity, m/s</small>
-                <input name="velocity-x-1" type="number" class="form-control" aria-describedby="velocity-x-1" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="velocity-y-1" class="form-text text-muted">Y-velocity, m/s</small>
-                <input name="velocity-y-1" type="number" class="form-control" aria-describedby="velocity-y-1" placeholder="0"  oninput="handleFormInput()">
-            </div>
-          </div>
-          <div class="col" id="body-2" onchange="handleFormInput()">
-            <div class="row">
-                <p class="text-center">Body 2</p>
-                <select id="color-2">
-                    <option value="green">Green</option>
-                    <option value="blue">Blue</option>
-                    <option value="red">Red</option>
-                </select>
-            </div>
-            <div class="row">
-                <small id="mass-2" class="form-text text-muted">Mass, kg</small>
-                <input name="mass-2" type="number" class="form-control" aria-describedby="mass-2" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="position-x-2" class="form-text text-muted">X-position, m</small>
-                <input name="position-x-2" type="number" class="form-control" aria-describedby="position-x-2" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="position-y-2" class="form-text text-muted">Y-position, m</small>
-                <input name="position-y-2" type="number" class="form-control" aria-describedby="position-y-2" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="velocity-x-2" class="form-text text-muted">X-velocity, m/s</small>
-                <input name="velocity-x-2" type="number" class="form-control" aria-describedby="velocity-x-2" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="velocity-y-2" class="form-text text-muted">Y-velocity, m/s</small>
-                <input name="velocity-y-2" type="number" class="form-control" aria-describedby="velocity-y-2" placeholder="0"  oninput="handleFormInput()">
-            </div>
-          </div>
-          <div class="col" id="body-3">
-            <div class="row">
-                <p class="text-center">Body 3</p>
-                <select id="color-3" onchange="handleFormInput()">
-                    <option value="red">Red</option>
-                    <option value="Green">Green</option>
-                    <option value="Blue">Blue</option>
-                </select>
-            </div>
-            <div class="row">
-                <small id="mass-3" class="form-text text-muted">Mass, kg</small>
-                <input name="mass-3" type="number" class="form-control" aria-describedby="mass-3" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="position-x-3" class="form-text text-muted">X-position, m</small>
-                <input name="position-x-3" type="number" class="form-control" aria-describedby="position-x-3" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="position-y-3" class="form-text text-muted">Y-position, m</small>
-                <input name="position-y-3" type="number" class="form-control" aria-describedby="position-y-3" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="velocity-x-3" class="form-text text-muted">X-velocity, m/s</small>
-                <input name="velocity-x-3" type="number" class="form-control" aria-describedby="velocity-x-3" placeholder="0"  oninput="handleFormInput()">
-            </div>
-            <div class="row">
-                <small id="velocity-y-3" class="form-text text-muted">Y-velocity, m/s</small>
-                <input name="velocity-y-3" type="number" class="form-control" aria-describedby="velocity-y-3" placeholder="0"  oninput="handleFormInput()">
-            </div>
-          </div>
-          <div class="col"></div>
+          <div class="col plus-form-col"><button  type="button" class="btn btn-light" onclick="buildObjectForm(); event.preventDefault()"><i class="fa fa-plus"></i></button></div>
         </div>
         <hr/>
         <div class="row">
@@ -138,6 +49,38 @@
             <canvas id="graphCanvas" width="800" height="800"></canvas>
         </div>
         <div class="col"></div>
+    </div>
+    <div class="body-template" style="display: none;">
+        <div class="col body">
+            <div class="row">
+                <p class="text-center">Body<button  type="button" class="btn btn-light pull-right" onclick="deleteBody(this); event.preventDefault()"><i class="fa fa-trash-o"></i></button></p>
+                <select class="color" onchange="handleFormInput()">
+                    <option value="blue">Blue</option>
+                    <option value="red">Red</option>
+                    <option value="green">Green</option>
+                </select>
+            </div>
+            <div class="row">
+                <small class="form-text text-muted">Mass, kg</small>
+                <input name="mass" type="number" class="form-control" placeholder="0"  oninput="handleFormInput()">
+            </div>
+            <div class="row">
+                <small class="form-text text-muted">X-position, m</small>
+                <input name="position-x" type="number" class="form-control" placeholder="0"  oninput="handleFormInput()">
+            </div>
+            <div class="row">
+                <small class="form-text text-muted">Y-position, m</small>
+                <input name="position-y" type="number" class="form-control" placeholder="0"  oninput="handleFormInput()">
+            </div>
+            <div class="row">
+                <small class="form-text text-muted">X-velocity, m/s</small>
+                <input name="velocity-x" type="number" class="form-control" placeholder="0"  oninput="handleFormInput()">
+            </div>
+            <div class="row">
+                <small class="form-text text-muted">Y-velocity, m/s</small>
+                <input name="velocity-y" type="number" class="form-control" placeholder="0"  oninput="handleFormInput()">
+            </div>
+        </div>
     </div>
     <script src="body-problem-solver.js"></script>
   </body>
