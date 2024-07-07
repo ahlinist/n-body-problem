@@ -16,31 +16,32 @@
           <div class="col">
             <p class="text-center">Presets</p>
             <div class="row">
-                <p class="text-center"><button style="width: 180px;" onclick="fillCircularPreset(); event.preventDefault()">Circular motion</button></p>
-                <p class="text-center"><button style="width: 180px;" onclick="fillEllipticPreset(); event.preventDefault()">Elliptic motion</button></p>
-                <p class="text-center"><button style="width: 180px;" onclick="fillParabolaPreset(); event.preventDefault()">Escape in parabola</button></p>
-                <p class="text-center"><button style="width: 180px;" onclick="fillTripleSystemPreset(); event.preventDefault()">Triple system</button></p>
-                <p class="text-center"><button style="width: 180px;" onclick="fillChaosPreset(); event.preventDefault()">Chaos</button></p>
+                <p class="text-center"><button class="btn btn-light border border-dark" style="width: 180px;" onclick="fillCircularPreset(); event.preventDefault()">Circular motion</button></p>
+                <p class="text-center"><button class="btn btn-light border border-dark" style="width: 180px;" onclick="fillEllipticPreset(); event.preventDefault()">Elliptic motion</button></p>
+                <p class="text-center"><button class="btn btn-light border border-dark" style="width: 180px;" onclick="fillParabolaPreset(); event.preventDefault()">Escape in parabola</button></p>
+                <p class="text-center"><button class="btn btn-light border border-dark" style="width: 180px;" onclick="fillTripleSystemPreset(); event.preventDefault()">Triple system</button></p>
+                <p class="text-center"><button class="btn btn-light border border-dark" style="width: 180px;" onclick="fillChaosPreset(); event.preventDefault()">Chaos</button></p>
             </div>
           </div>
           <div class="col plus-form-col"><button  type="button" class="btn btn-light" onclick="buildObjectForm(); event.preventDefault()"><i class="fa fa-plus"></i></button></div>
         </div>
         <hr/>
         <div class="row">
-            <div class="col"></div>
-            <div class="col">
+            <div class="col col-sm-1"></div>
+            <div class="col col-sm-8">
                 <div class="row">
-                    <button style="width: 150px;" onclick="startAnimation(); event.preventDefault()" title="Real time animation">Start Animation</button>
-                    &nbsp;step size, s:&nbsp;<input style="width: 150px;" id="animation-step-size" type="number" min="0" class="form-control" placeholder="1">
-                    &nbsp;speed:&nbsp;<input style="width: 150px;" id="animation-speed" type="number" min="1" class="form-control" placeholder="1" step="1">
+                    &nbsp;step size, s:&nbsp;<input style="width: 140px;" id="step-size" type="number" min="0" class="form-control" placeholder="1">
                 </div>
                 <div class="row">
-                    <button style="width: 150px;" onclick="runSimulation(); event.preventDefault()" title="Winds time to specified value">Run Simulation</button>
-                    &nbsp;step size, s:&nbsp;<input style="width: 150px;" id="simulation-step-size" type="number" min="0" class="form-control" placeholder="5e-7">
-                    &nbsp;time, s:&nbsp;<input style="width: 150px;" id="simulation-time" name="simulation-time" type="number" class="form-control" min="0" placeholder="15">
+                    <button class="btn btn-light border border-dark" style="width: 180px;" onclick="startAnimation(); event.preventDefault()" title="Real time animation">Start Animation</button>
+                    &nbsp;speed:&nbsp;<input style="width: 140px;" id="animation-speed" type="number" min="1" class="form-control" placeholder="1" step="1">
+                </div>
+                <div class="row">
+                    <button class="btn btn-light border border-dark" style="width: 180px;" onclick="runSimulation(); event.preventDefault()" title="Winds time to specified value">Calculate Trajectory</button>
+                    &nbsp;time, s:&nbsp;<input style="width: 140px;" id="simulation-time" name="simulation-time" type="number" class="form-control" min="0" placeholder="15">
                 </div>
             </div>
-            <div class="col"></div>
+            <div class="col col-sm-3"></div>
         </div>
       </form>
       <div class="row">

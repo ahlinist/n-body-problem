@@ -23,7 +23,7 @@ const handleFormInput = () => {
 }
 
 const buildObjects = (form) => {
-    const stepSize = parseFloat(document.querySelector("input#animation-step-size").value) || 1; //TODO: animation stepSize is applied, fix for simulation
+    const stepSize = parseFloat(document.querySelector("input#step-size").value) || 1; //TODO: animation stepSize is applied, fix for simulation
 
     return Array.from(form.querySelectorAll('div.body'))
         .map(body => {
@@ -91,7 +91,7 @@ const clearCanvas = (canvas) => {
 
 const startAnimation = () => {
     const objects = handleFormInput();
-    const stepSize = parseFloat(document.querySelector("input#animation-step-size").value) || 1;
+    const stepSize = parseFloat(document.querySelector("input#step-size").value) || 1;
     const speed = parseFloat(document.querySelector("input#animation-speed").value) || 1;
     let interval = stepSize * speed * 1000;
 
@@ -123,7 +123,7 @@ const determineCalculateStepFunction = (objects) => {
 const runSimulation = () => {
     const objects = handleFormInput();
     const time = parseFloat(document.querySelector("input#simulation-time").value) || 15;
-    const stepSize = parseFloat(document.querySelector("input#simulation-step-size").value) || 5e-7;
+    const stepSize = parseFloat(document.querySelector("input#step-size").value) || 5e-7;
     const stepIncrement = 1;
     const timesPointPlotted = 10000;
     const loopUntil = time / (stepSize * timesPointPlotted);
@@ -311,10 +311,10 @@ const fillPreset = (objects, starter) => {
         populateForm(object, buildObjectForm());
     }
 
-    document.querySelector('input#animation-step-size').value = starter.animationStepSize;
+    document.querySelector('input#step-size').value = starter.animationStepSize;
     document.querySelector('input#animation-speed').value = starter.animationSpeed;
 
-    document.querySelector('input#simulation-step-size').value = starter.simulationStepSize;
+    document.querySelector('input#step-size').value = starter.simulationStepSize;
     document.querySelector('input#simulation-time').value = starter.simulationTime;
 
     handleFormInput();
