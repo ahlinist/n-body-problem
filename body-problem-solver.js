@@ -23,7 +23,7 @@ const handleFormInput = () => {
 }
 
 const buildObjects = (form) => {
-    const stepSize = parseFloat(document.querySelector("input#step-size").value) || 1; //TODO: animation stepSize is applied, fix for simulation
+    const stepSize = parseFloat(document.querySelector("input#step-size").value) || 1;
 
     return Array.from(form.querySelectorAll('div.body'))
         .map(body => {
