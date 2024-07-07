@@ -101,10 +101,10 @@ const startAnimation = () => {
 
     const loopUntil = interval / 1000;
     const stepIncrement = stepSize / speed;
-    const halfInterval = stepSize / 2;
+    const halfStepSize = stepSize / 2;
     const calculateStepFn = determineCalculateStepFunction(objects);
 
-    timerId = setInterval(() => calculateStepFn(objects, stepSize, loopUntil, stepIncrement, halfInterval), interval); //fires every <interval> ms
+    timerId = setInterval(() => calculateStepFn(objects, stepSize, loopUntil, stepIncrement, halfStepSize), interval); //fires every <interval> ms
 };
 
 const determineCalculateStepFunction = (objects) => {
@@ -127,15 +127,15 @@ const runSimulation = () => {
     const stepIncrement = 1;
     const timesPointPlotted = 10000;
     const loopUntil = time / (stepSize * timesPointPlotted);
-    const halfInterval = stepSize / 2;
+    const halfStepSize = stepSize / 2;
     const calculateStepFn = determineCalculateStepFunction(objects);
 
     for (let i = 0; i < timesPointPlotted; i++) {
-        calculateStepFn(objects, stepSize, loopUntil, stepIncrement, halfInterval);
+        calculateStepFn(objects, stepSize, loopUntil, stepIncrement, halfStepSize);
     }
 };
 
-const calculateStep2Bodies = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
+const calculateStep2Bodies = (objects, stepSize, loopUntil, stepIncrement, halfStepSize) => {
     for (let i = 0; i < loopUntil; i += stepIncrement) {
         const object1 = objects[0];
         const object2 = objects[1];
@@ -159,10 +159,10 @@ const calculateStep2Bodies = (objects, interval, loopUntil, stepIncrement, halfI
         const vy1 = object1.vy - velocityChangeY1;
         const vx2 = object2.vx - velocityChangeX2;
         const vy2 = object2.vy - velocityChangeY2;
-        const x1 = object1.x + object1.vx * interval - velocityChangeX1 * halfInterval;
-        const y1 = object1.y + object1.vy * interval - velocityChangeY1 * halfInterval;
-        const x2 = object2.x + object2.vx * interval - velocityChangeX2 * halfInterval;
-        const y2 = object2.y + object2.vy * interval - velocityChangeY2 * halfInterval;
+        const x1 = object1.x + object1.vx * stepSize - velocityChangeX1 * halfStepSize;
+        const y1 = object1.y + object1.vy * stepSize - velocityChangeY1 * halfStepSize;
+        const x2 = object2.x + object2.vx * stepSize - velocityChangeX2 * halfStepSize;
+        const y2 = object2.y + object2.vy * stepSize - velocityChangeY2 * halfStepSize;
 
         objects[0] = { 
             gravitationalParameterS: object1.gravitationalParameterS, 
@@ -185,7 +185,7 @@ const calculateStep2Bodies = (objects, interval, loopUntil, stepIncrement, halfI
     drawObjects(objects);
 };
 
-const calculateStep3Bodies = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
+const calculateStep3Bodies = (objects, stepSize, loopUntil, stepIncrement, halfStepSize) => {
     for (let i = 0; i < loopUntil; i += stepIncrement) {
         const object1 = objects[0];
         const object2 = objects[1];
@@ -225,12 +225,12 @@ const calculateStep3Bodies = (objects, interval, loopUntil, stepIncrement, halfI
         const vy2 = object2.vy - velocityChangeY2;
         const vx3 = object3.vx - velocityChangeX3;
         const vy3 = object3.vy - velocityChangeY3;
-        const x1 = object1.x + object1.vx * interval - velocityChangeX1 * halfInterval;
-        const y1 = object1.y + object1.vy * interval - velocityChangeY1 * halfInterval;
-        const x2 = object2.x + object2.vx * interval - velocityChangeX2 * halfInterval;
-        const y2 = object2.y + object2.vy * interval - velocityChangeY2 * halfInterval;
-        const x3 = object3.x + object3.vx * interval - velocityChangeX3 * halfInterval;
-        const y3 = object3.y + object3.vy * interval - velocityChangeY3 * halfInterval;
+        const x1 = object1.x + object1.vx * stepSize - velocityChangeX1 * halfStepSize;
+        const y1 = object1.y + object1.vy * stepSize - velocityChangeY1 * halfStepSize;
+        const x2 = object2.x + object2.vx * stepSize - velocityChangeX2 * halfStepSize;
+        const y2 = object2.y + object2.vy * stepSize - velocityChangeY2 * halfStepSize;
+        const x3 = object3.x + object3.vx * stepSize - velocityChangeX3 * halfStepSize;
+        const y3 = object3.y + object3.vy * stepSize - velocityChangeY3 * halfStepSize;
 
         objects[0] = { 
             gravitationalParameterS: object1.gravitationalParameterS, 
@@ -261,7 +261,7 @@ const calculateStep3Bodies = (objects, interval, loopUntil, stepIncrement, halfI
     drawObjects(objects);
 };
 
-const calculateStepNBodies = (objects, interval, loopUntil, stepIncrement, halfInterval) => {
+const calculateStepNBodies = (objects, stepSize, loopUntil, stepIncrement, halfStepSize) => {
     for (let i = 0; i < loopUntil; i += stepIncrement) {
         const result = new Array(objects.length);
 
@@ -285,8 +285,8 @@ const calculateStepNBodies = (objects, interval, loopUntil, stepIncrement, halfI
 
             const vx = currentObject.vx - velocityChangeX;
             const vy = currentObject.vy - velocityChangeY;
-            const x = currentObject.x + currentObject.vx * interval - velocityChangeX * halfInterval;
-            const y = currentObject.y + currentObject.vy * interval - velocityChangeY * halfInterval;
+            const x = currentObject.x + currentObject.vx * stepSize - velocityChangeX * halfStepSize;
+            const y = currentObject.y + currentObject.vy * stepSize - velocityChangeY * halfStepSize;
 
             result[i] = { gravitationalParameterS: currentObject.gravitationalParameterS, color: currentObject.color, x, y, vx, vy };
         }
