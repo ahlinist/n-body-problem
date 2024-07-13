@@ -374,6 +374,16 @@ const fillChaosPreset = () => {
     { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
 };
 
+const fillL45Preset = () => {
+    fillPreset([
+        { mass: 100000000000, x: 0, y: 0, vx: 0, vy: 0 },
+        { mass: 1, x: 1, y: 1.732, vx: -1.582, vy: 0.913 },
+        { mass: 10000000, x: 2, y: 0, vx: 0, vy: 1.83 },
+        { mass: 1, x: 1, y: -1.732, vx: 1.582, vy: 0.913 },
+    ],
+    { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
+};
+
 const deleteBody = (button) => {
     button.closest('div.body').remove();
     handleFormInput();
