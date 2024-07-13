@@ -1,7 +1,7 @@
 const G = 6.6743e-11;
 const TWO_PI = 2 * Math.PI;
 const MIN_INTERVAL = 10; //ms
-const COLORS = ['blue', 'green', 'red', 'yellow', 'black', 'orange']
+const COLORS = ['blue', 'green', 'red', 'yellow', 'white', 'orange']
 let colorIndex = 0;
 
 let scaleX;
@@ -374,12 +374,13 @@ const fillChaosPreset = () => {
     { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
 };
 
-const fillL45Preset = () => {
+const fillLagrangePreset = () => {
     fillPreset([
         { mass: 100000000000, x: 0, y: 0, vx: 0, vy: 0 },
         { mass: 1, x: 1, y: 1.732, vx: -1.582, vy: 0.913 },
         { mass: 10000000, x: 2, y: 0, vx: 0, vy: 1.83 },
         { mass: 1, x: 1, y: -1.732, vx: 1.582, vy: 0.913 },
+        { mass: 10000000, x: -2, y: 0, vx: 0, vy: -1.83 },
     ],
     { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
 };
