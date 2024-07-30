@@ -33,8 +33,6 @@ const create3DCanvasWithAxes = () => {
     };
 
     animate();
-
-    return { scene, camera, renderer };
 };
 
 const draw3DObjects = (scene, objects) => {
@@ -399,45 +397,3 @@ function getNextColor() {
 Array.from({length: 3}, () => buildObjectForm());
 
 handleFormInput();
-
-
-/*
-const scene = new THREE.Scene();
-
-// Create a camera, which determines what we'll see when we render the scene
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-// Create a renderer and attach it to our document
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById('container').appendChild(renderer.domElement);
-
-// Create a geometry and a material then combine them into a mesh
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-
-// Add the mesh to our scene
-scene.add(cube);
-
-// Move the camera away from the origin, down the Z axis
-// We're using vector mathematics here: the negative Z axis is "out of the screen"
-camera.position.z = 5;
-
-// Create a render loop that will draw our scene every time the screen is refreshed
-const animate = function () {
-    requestAnimationFrame(animate);
-
-    // Apply some rotation to the cube mesh for animation
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-
-    // Render the scene from the perspective of the camera
-    renderer.render(scene, camera);
-};
-
-// Run the animation function for the first time to kick things off
-animate();
-
-*/
-
