@@ -1,24 +1,57 @@
 const G = 6.6743e-11;
-const TWO_PI = 2 * Math.PI;
 const MIN_INTERVAL = 10; //ms
-const COLORS = ['blue', 'green', 'red', 'yellow', 'white', 'orange']
+const COLORS = ['blue', 'green', 'red', 'yellow', 'orange']
 let colorIndex = 0;
-
-let scaleX;
-let scaleY;
-let offsetX;
-let offsetY;
 
 let timerId;
 
-const canvas = document.getElementById('graphCanvas');
-const context = canvas.getContext('2d');
 const form = document.querySelector("form#parameter-form");
+const container = document.getElementById('container');
+
+let scene, camera, renderer;
+
+const create3DCanvasWithAxes = () => {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);;
+    container.innerHTML = ''
+    container.appendChild(renderer.domElement);
+
+    const axesHelper = new THREE.AxesHelper(5);
+    axesHelper.material.color.set(0x000000); // Set axes color to black
+    scene.add(axesHelper);
+    renderer.setClearColor(0xffffff); // Set background color to white
+
+    camera.position.x = 1;
+    camera.position.y = 1;
+    camera.position.z = 5;
+
+    const animate = () => {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    };
+
+    animate();
+
+    return { scene, camera, renderer };
+};
+
+const draw3DObjects = (scene, objects) => {
+    objects.forEach(object => {
+        const geometry = new THREE.SphereGeometry(0.04, 32, 32);
+        const material = new THREE.MeshBasicMaterial({ color: object.color });
+        const sphere = new THREE.Mesh(geometry, material);
+        sphere.position.set(object.x, object.y, object.z);
+        scene.add(sphere);
+    });
+};
 
 const handleFormInput = () => {
     clearTimeout(timerId);
     const objects = buildObjects(form);
-    buildCanvas(form, objects);
+    create3DCanvasWithAxes();
+    draw3DObjects(scene, objects);
     return objects;
 }
 
@@ -41,53 +74,6 @@ const buildObjects = (form) => {
         })
         .filter(object => object.gravitationalParameterS > 0);
 };
-
-const buildCanvas = (form, objects) => {
-    clearCanvas(canvas);
-
-    const minX = Math.min(...objects.map(object => object.x)) || 0;
-    const maxX = Math.max(...objects.map(object => object.x)) || 0;
-    const minY = Math.min(...objects.map(object => object.y)) || 0;
-    const maxY = Math.max(...objects.map(object => object.y)) || 0;
-    const maxDimension = Math.max(maxX - minX, maxY - minY) * 3.5 || 10;
-
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
-
-    // Set the graph parameters
-    scaleX = canvasWidth / maxDimension;
-    scaleY = canvasHeight / maxDimension;
-    offsetX = canvasWidth / 2;
-    offsetY = canvasHeight / 2;
-
-    // Draw the x and y axes
-    context.beginPath();
-    context.moveTo(0, offsetY);
-    context.lineTo(canvasWidth, offsetY);
-    context.moveTo(offsetX, 0);
-    context.lineTo(offsetX, canvasHeight);
-    context.strokeStyle = 'black';
-    context.stroke();
-
-    drawObjects(objects);
-};
-
-const drawObjects = (objects) => {
-    objects.forEach(object => {
-        context.beginPath();
-        const x = offsetX + object.x * scaleX;
-        const y = offsetY - object.y * scaleY;
-        context.fillStyle = object.color;
-        context.arc(x, y, 4, 0, TWO_PI);
-        context.fill();
-        context.stroke();
-    });
-};
-
-const clearCanvas = (canvas) => {
-    const context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-}
 
 const startAnimation = () => {
     const objects = handleFormInput();
@@ -181,7 +167,7 @@ const calculateStep2Bodies = (objects, stepSize, loopUntil, loopIncrement, halfS
         };
     }
     
-    drawObjects(objects);
+    draw3DObjects(scene, objects);
 };
 
 const calculateStep3Bodies = (objects, stepSize, loopUntil, loopIncrement, halfStepSize) => {
@@ -257,7 +243,7 @@ const calculateStep3Bodies = (objects, stepSize, loopUntil, loopIncrement, halfS
         };
     }
     
-    drawObjects(objects);
+    draw3DObjects(scene, objects);
 };
 
 const calculateStepNBodies = (objects, stepSize, loopUntil, loopIncrement, halfStepSize) => {
@@ -295,7 +281,7 @@ const calculateStepNBodies = (objects, stepSize, loopUntil, loopIncrement, halfS
         }
     }
 
-    drawObjects(objects);
+    draw3DObjects(scene, objects);
 };
 
 const fillPreset = (objects, starter) => {
@@ -413,3 +399,45 @@ function getNextColor() {
 Array.from({length: 3}, () => buildObjectForm());
 
 handleFormInput();
+
+
+/*
+const scene = new THREE.Scene();
+
+// Create a camera, which determines what we'll see when we render the scene
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+// Create a renderer and attach it to our document
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById('container').appendChild(renderer.domElement);
+
+// Create a geometry and a material then combine them into a mesh
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+
+// Add the mesh to our scene
+scene.add(cube);
+
+// Move the camera away from the origin, down the Z axis
+// We're using vector mathematics here: the negative Z axis is "out of the screen"
+camera.position.z = 5;
+
+// Create a render loop that will draw our scene every time the screen is refreshed
+const animate = function () {
+    requestAnimationFrame(animate);
+
+    // Apply some rotation to the cube mesh for animation
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
+    // Render the scene from the perspective of the camera
+    renderer.render(scene, camera);
+};
+
+// Run the animation function for the first time to kick things off
+animate();
+
+*/
+
