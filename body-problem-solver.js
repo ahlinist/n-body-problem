@@ -10,6 +10,9 @@ const container = document.getElementById('container');
 
 let scene, camera, renderer;
 
+const geometry = new THREE.SphereGeometry(0.04, 32, 32);
+const materials = COLORS.map(color => new THREE.MeshBasicMaterial({ color }));
+
 const create3DCanvasWithAxes = () => {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -26,22 +29,36 @@ const create3DCanvasWithAxes = () => {
     camera.position.x = 1;
     camera.position.y = 1;
     camera.position.z = 5;
-
-    const animate = () => {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    };
-
-    animate();
 };
 
+create3DCanvasWithAxes();
+
+const animate = () => {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+};
+
+animate();
+
 const draw3DObjects = (scene, objects) => {
+    while (scene.children.length > 1) {
+        scene.remove(scene.children[scene.children.length - 1]);
+    }
+
     objects.forEach(object => {
-        const geometry = new THREE.SphereGeometry(0.04, 32, 32);
-        const material = new THREE.MeshBasicMaterial({ color: object.color });
+        const material = materials[COLORS.indexOf(object.color)];
         const sphere = new THREE.Mesh(geometry, material);
         sphere.position.set(object.x, object.y, object.z);
+        object.mesh = sphere;
         scene.add(sphere);
+    });
+};
+
+const update3DObjects = (objects) => {
+    objects.forEach(object => {
+        if (object.mesh) {
+            object.mesh.position.set(object.x, object.y, object.z);
+        }
     });
 };
 
@@ -87,7 +104,10 @@ const startAnimation = () => {
     const halfStepSize = stepSize / 2;
     const calculateStepFn = determineCalculateStepFunction(objects);
 
-    timerId = setInterval(() => calculateStepFn(objects, stepSize, loopUntil, stepSize, halfStepSize), interval); //fires every <interval> ms
+    timerId = setInterval(() => {
+        calculateStepFn(objects, stepSize, loopUntil, stepSize, halfStepSize);
+        update3DObjects(objects);
+    }, interval); //fires every <interval> ms
 };
 
 const determineCalculateStepFunction = (objects) => {
