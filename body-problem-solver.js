@@ -204,20 +204,20 @@ const populateForm = (object, form) => {
 
 const fillCircularPreset = () => {
     fillPreset([
-        { mass: 100000000000, x: 0, y: 0, z: 0, vx: 0, vy: 0 },
-        { mass: 1, x: 1, y: 0, z: 0, vx: 0, vy: 2.58, vz: 0 },
-        { mass: 1, x: 0, y: 2, z: 0, vx: 0, vy: 0, vz: 1.83 },
-        { mass: 1, x: 0, y: 0, z: 1.5, vx: 2.1, vy: 0, vz: 0 },
+        { mass: 100000000000 },
+        { mass: 1, x: 1, vy: 2.58 },
+        { mass: 1, y: 2, vz: 1.83 },
+        { mass: 1, z: 1.5, vx: 2.1 },
     ],
     { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
 };
 
 const fillEllipticPreset = () => {
     fillPreset([
-        { mass: 10000000000, x: -1, y: 0, vx: 0, vy: 0 },
-        { mass: 1, x: 1, y: 0, vx: 0, vy: 0.2 },
-        { mass: 1, x: -3, y: 2, vx: 0, vy: -0.2 },
-        { mass: 1, x: 1, y: 2, vx: -0.4, vy: 0 },
+        { mass: 10000000000 },
+        { mass: 1, x: 2, vy: 0.2, vz: 0.1 },
+        { mass: 1, x: -2, y: 2, vy: -0.2 },
+        { mass: 1, x: 2, y: 2, z: -1, vx: -0.3, vz: 0.3 },
     ],
     { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
 };
