@@ -233,10 +233,10 @@ const fillParabolaPreset = () => {
 
 const fillChaosPreset = () => {
     fillPreset([
-        { mass: 100000000000, x: -3, y: -1, vx: 0, vy: 0.3 },
-        { mass: 100000000000, x: 1, y: 0, vx: -0.2, vy: 0.1 },
-        { mass: 100000000000, x: 4, y: 2, vx: -0.1, vy: -0.4 },
-        { mass: 100000000000, x: -4, y: 3, vx: 0.1, vy: -0.1 },
+        { mass: 100000000000, x: -3, y: -1, z: 1, vx: 0, vy: 0.3 },
+        { mass: 100000000000, x: 1, y: 0, vx: -0.2, z: 2, vy: 0.1 },
+        { mass: 100000000000, x: 4, y: 2, vx: -0.1, z: -1, vy: -0.4 },
+        { mass: 100000000000, x: -4, y: 3, vx: 0.1, z: -2, vy: -0.1 },
     ],
     { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
 };
