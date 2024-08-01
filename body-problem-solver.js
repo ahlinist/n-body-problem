@@ -145,14 +145,12 @@ const calculateStep = (objects, stepSize, loopUntil, loopIncrement, halfStepSize
                 const distanceY = currentObject.y - object.y;
                 const distanceZ = currentObject.z - object.z;
                 const distanceSquared = distanceX ** 2 + distanceY ** 2 + distanceZ ** 2;
+                const distance = Math.sqrt(distanceSquared);
 
-                const angleYX = Math.atan2(distanceY, distanceX);
-                const angleYZ = Math.atan2(distanceY, distanceZ);
-
-                const velocity = object.gravitationalParameterS / distanceSquared;
-                velocityChangeX += Math.cos(angleYX) * velocity;
-                velocityChangeY += Math.sin(angleYX) * velocity;
-                velocityChangeZ += Math.cos(angleYZ) * velocity;
+                const force = object.gravitationalParameterS / distanceSquared;
+                velocityChangeX += (force * distanceX) / distance;
+                velocityChangeY += (force * distanceY) / distance;
+                velocityChangeZ += (force * distanceZ) / distance;
             }
 
             const vx = currentObject.vx - velocityChangeX;
