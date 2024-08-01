@@ -28,7 +28,7 @@ const createCanvas = () => {
 
     camera.position.x = 1;
     camera.position.y = 1;
-    camera.position.z = 4;
+    camera.position.z = 5;
 };
 
 createCanvas();
@@ -135,6 +135,7 @@ const calculateStep = (objects, stepSize, loopUntil, loopIncrement, halfStepSize
             const currentObject = objects[i];
             let velocityChangeX = 0;
             let velocityChangeY = 0;
+            let velocityChangeZ = 0;
             
             for (let j = 0; j < objects.length; j++) {
                 if (i === j) continue;
@@ -142,19 +143,26 @@ const calculateStep = (objects, stepSize, loopUntil, loopIncrement, halfStepSize
 
                 const distanceX = currentObject.x - object.x;
                 const distanceY = currentObject.y - object.y;
-                const distanceSquared = distanceX ** 2 + distanceY ** 2;
-                const angle = Math.atan2(distanceY, distanceX);
+                const distanceZ = currentObject.z - object.z;
+                const distanceSquared = distanceX ** 2 + distanceY ** 2 + distanceZ ** 2;
+
+                const angleYX = Math.atan2(distanceY, distanceX);
+                const angleYZ = Math.atan2(distanceY, distanceZ);
+
                 const velocity = object.gravitationalParameterS / distanceSquared;
-                velocityChangeX += Math.cos(angle) * velocity;
-                velocityChangeY += Math.sin(angle) * velocity;
+                velocityChangeX += Math.cos(angleYX) * velocity;
+                velocityChangeY += Math.sin(angleYX) * velocity;
+                velocityChangeZ += Math.cos(angleYZ) * velocity;
             }
 
             const vx = currentObject.vx - velocityChangeX;
             const vy = currentObject.vy - velocityChangeY;
+            const vz = currentObject.vz - velocityChangeZ;
             const x = currentObject.x + currentObject.vx * stepSize - velocityChangeX * halfStepSize;
             const y = currentObject.y + currentObject.vy * stepSize - velocityChangeY * halfStepSize;
+            const z = currentObject.z + currentObject.vz * stepSize - velocityChangeZ * halfStepSize;
 
-            result[i] = { gravitationalParameterS: currentObject.gravitationalParameterS, color: currentObject.color, x, y, vx, vy };
+            result[i] = { gravitationalParameterS: currentObject.gravitationalParameterS, color: currentObject.color, x, y, z, vx, vy, vz };
         }
 
         for (let i = 0; i < objects.length; i++) {
