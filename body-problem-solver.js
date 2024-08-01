@@ -231,15 +231,6 @@ const fillParabolaPreset = () => {
     { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
 };
 
-const fillTripleSystemPreset = () => {
-    fillPreset([
-        { mass: 10000000000, x: -1, y: 0, vx: 0, vy: -0.3 },
-        { mass: 10000000000, x: 1, y: 0, vx: 0, vy: 0.3 },
-        { mass: 1000, x: 4, y: 0, vx: 0, vy: 0.58 },
-    ],
-    { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
-};
-
 const fillChaosPreset = () => {
     fillPreset([
         { mass: 100000000000, x: -3, y: -1, vx: 0, vy: 0.3 },
