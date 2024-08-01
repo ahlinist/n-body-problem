@@ -196,15 +196,18 @@ const populateForm = (object, form) => {
     form.querySelector("input[name=mass]").value = object.mass;
     form.querySelector("input[name=position-x]").value = object.x;
     form.querySelector("input[name=position-y]").value = object.y;
+    form.querySelector("input[name=position-z]").value = object.z;
     form.querySelector("input[name=velocity-x]").value = object.vx;
     form.querySelector("input[name=velocity-y]").value = object.vy;
+    form.querySelector("input[name=velocity-z]").value = object.vz;
 };
 
 const fillCircularPreset = () => {
     fillPreset([
-        { mass: 100000000000, x: 0, y: 0, vx: 0, vy: 0 },
-        { mass: 1, x: 1, y: 0, vx: 0, vy: 2.58 },
-        { mass: 1, x: 0, y: 2, vx: 1.83, vy: 0 },
+        { mass: 100000000000, x: 0, y: 0, z: 0, vx: 0, vy: 0 },
+        { mass: 1, x: 1, y: 0, z: 0, vx: 0, vy: 2.58, vz: 0 },
+        { mass: 1, x: 0, y: 2, z: 0, vx: 0, vy: 0, vz: 1.83 },
+        { mass: 1, x: 0, y: 0, z: 1.5, vx: 2.1, vy: 0, vz: 0 },
     ],
     { animationStepSize: 1e-6, animationSpeed: 1, simulationStepSize: 1e-6, simulationTime: 15});
 };
