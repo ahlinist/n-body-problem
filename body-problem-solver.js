@@ -13,7 +13,7 @@ let scene, camera, renderer;
 const geometry = new THREE.SphereGeometry(0.04, 32, 32);
 const materials = COLORS.map(color => new THREE.MeshBasicMaterial({ color }));
 
-const create3DCanvasWithAxes = () => {
+const createCanvas = () => {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer();
@@ -28,10 +28,10 @@ const create3DCanvasWithAxes = () => {
 
     camera.position.x = 1;
     camera.position.y = 1;
-    camera.position.z = 5;
+    camera.position.z = 4;
 };
 
-create3DCanvasWithAxes();
+createCanvas();
 
 const animate = () => {
     requestAnimationFrame(animate);
@@ -40,7 +40,7 @@ const animate = () => {
 
 animate();
 
-const draw3DObjects = (scene, objects) => {
+const drawObjects = (scene, objects) => {
     while (scene.children.length > 1) {
         scene.remove(scene.children[scene.children.length - 1]);
     }
@@ -54,7 +54,7 @@ const draw3DObjects = (scene, objects) => {
     });
 };
 
-const update3DObjects = (objects) => {
+const updateObjects = (objects) => {
     objects.forEach(object => {
         if (object.mesh) {
             object.mesh.position.set(object.x, object.y, object.z);
@@ -65,8 +65,8 @@ const update3DObjects = (objects) => {
 const handleFormInput = () => {
     clearTimeout(timerId);
     const objects = buildObjects(form);
-    create3DCanvasWithAxes();
-    draw3DObjects(scene, objects);
+    createCanvas();
+    drawObjects(scene, objects);
     return objects;
 }
 
@@ -106,7 +106,7 @@ const startAnimation = () => {
 
     timerId = setInterval(() => {
         calculateStepFn(objects, stepSize, loopUntil, stepSize, halfStepSize);
-        update3DObjects(objects);
+        updateObjects(objects);
     }, interval); //fires every <interval> ms
 };
 
@@ -185,7 +185,7 @@ const calculateStep2Bodies = (objects, stepSize, loopUntil, loopIncrement, halfS
         };
     }
     
-    draw3DObjects(scene, objects);
+    drawObjects(scene, objects);
 };
 
 const calculateStep3Bodies = (objects, stepSize, loopUntil, loopIncrement, halfStepSize) => {
@@ -261,7 +261,7 @@ const calculateStep3Bodies = (objects, stepSize, loopUntil, loopIncrement, halfS
         };
     }
     
-    draw3DObjects(scene, objects);
+    drawObjects(scene, objects);
 };
 
 const calculateStepNBodies = (objects, stepSize, loopUntil, loopIncrement, halfStepSize) => {
@@ -299,7 +299,7 @@ const calculateStepNBodies = (objects, stepSize, loopUntil, loopIncrement, halfS
         }
     }
 
-    draw3DObjects(scene, objects);
+    drawObjects(scene, objects);
 };
 
 const fillPreset = (objects, starter) => {
